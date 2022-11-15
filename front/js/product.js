@@ -13,6 +13,7 @@ fetch("http://localhost:3000/api/products/" + id)
     listProduct = res ;
     console.log(res);
     afficheProduit(listProduct);
+    //addToCart();
 
   
   })
@@ -54,4 +55,62 @@ function afficheProduit (listProduct) {
 
 
 }
+
+
+//------gestion du panier ------//
+
+  /*addToCartBtn.addEventListener("click", () => {
+    if (quantity.value > 0 && quantity.value < 100) {*/
+
+//function addToCart (){ 
+
+let addToCartBtn= document.querySelector("#addToCart")
+addToCartBtn.addEventListener("click", () => {
+  if (quantity.value > 0 && quantity.value < 100) {
+ //récuperation des options choisies par le client sous la forme d'un objet
+let itemTitle= document.querySelector("#title");
+let colorOption = document.querySelector("#colors");
+let itemPrice= document.querySelector("#price");
+
+let productAdded = {
+  name: itemTitle.textContent, 
+  _id: id,
+  quantity: quantity.value,
+  color: colorOption.textContent, 
+  price: itemPrice.innerHTML,
+ 
+ }
+
+ console.log(productAdded);
+
+
+
+ //--------------Local Storage------------/
+// -------stocker la récupération des valeurs du formulaire dans le local storage ------//
+
+  let produitEnregistreLS = JSON.parse(localStorage.getItem("product"));
+  console.log(produitEnregistreLS);
+
+
+//s'il y a des produits déjà enregistrés dans LS
+if(produitEnregistreLS){
+  produitEnregistreLS.push(productAdded);
+  localStorage.setItem("product", JSON.stringify(produitEnregistreLS));
+  console.log(produitEnregistreLS);
+  
+}
+//s'il n'y pas de produits déjà enregistrés en LS
+else  {
+produitEnregistreLS = [];
+produitEnregistreLS.push(productAdded);
+//creation de la clef
+localStorage.setItem("product", JSON.stringify(produitEnregistreLS));
+
+console.log(produitEnregistreLS);
+}
+
+}
+});
+
+
 
