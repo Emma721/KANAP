@@ -22,11 +22,12 @@ fetch("http://localhost:3000/api/products/" + id)
 function afficheProduit (listProduct) {
 
   //selecteurs
-  let itemImg= document.querySelector(".item__img");
+  //let itemImg= document.querySelector(".item__img");
   let itemTitle= document.querySelector("#title");
   let itemPrice= document.querySelector("#price");
   let itemDescription= document.querySelector("#description");
   let colorOption = document.querySelector("#colors");
+  let itemImg = document.querySelector(".item__img")
 
   //creating the img element 
   let imgOneProduct = document.createElement('img');
@@ -59,8 +60,7 @@ function afficheProduit (listProduct) {
 
 //------gestion du panier ------//
 
-  /*addToCartBtn.addEventListener("click", () => {
-    if (quantity.value > 0 && quantity.value < 100) {*/
+console.log(imgOneProduct);
 
 //function addToCart (){ 
 
@@ -71,6 +71,9 @@ addToCartBtn.addEventListener("click", () => {
 let itemTitle= document.querySelector("#title");
 let colorOption = document.querySelector("#colors");
 let itemPrice= document.querySelector("#price");
+let itemImg = document.querySelector(".item__img");
+
+
 
 let productAdded = {
   name: itemTitle.textContent, 
@@ -78,6 +81,10 @@ let productAdded = {
   quantity: quantity.value,
   color: colorOption.textContent, 
   price: itemPrice.innerHTML,
+  imageSrc : itemImg.src,
+  imageAlt: itemImg.alt,
+  
+ 
  
  }
 
@@ -101,6 +108,7 @@ if(produitEnregistreLS){
 }
 //s'il n'y pas de produits déjà enregistrés en LS
 else  {
+  // ajouter le code pour faire que si le produit a ajouter n'a pas déja était ajouté alors on execute ce qu'il y a dans else : 
 produitEnregistreLS = [];
 produitEnregistreLS.push(productAdded);
 //creation de la clef
@@ -111,6 +119,7 @@ console.log(produitEnregistreLS);
 
 }
 });
+
 
 
 
