@@ -13,7 +13,6 @@ fetch("http://localhost:3000/api/products/" + id)
     listProduct = res ;
     console.log(res);
     afficheProduit(listProduct);
-    //addToCart();
 
   
   })
@@ -22,27 +21,26 @@ fetch("http://localhost:3000/api/products/" + id)
 function afficheProduit (listProduct) {
 
   //selecteurs
-  //let itemImg= document.querySelector(".item__img");
+  
   let itemTitle= document.querySelector("#title");
   let itemPrice= document.querySelector("#price");
   let itemDescription= document.querySelector("#description");
   let colorOption = document.querySelector("#colors");
-  let itemImg = document.querySelector(".item__img")
+  let itemImageLocation = document.querySelector(".item__img");
+
 
   //creating the img element 
-  let image = document.createElement('img');
-  image.src = listProduct.imageUrl ;
-  image.alt = listProduct.altTxt ;
-  itemImg.appendChild(image);
+  let itemImage = document.createElement('img');
+  itemImage.src = listProduct.imageUrl ;
+  itemImage.alt = listProduct.altTxt ;
+  itemImageLocation.appendChild(itemImage);
 
   //inserting the other elements
   itemTitle.textContent = listProduct.name;
   itemPrice.textContent = listProduct.price;
   itemDescription.textContent = listProduct.description;
 
-  //inserting the colors 
-  //let colorChoice = document.createElement("option");
-  
+  //inserting the colors  
   for (let i=0; i <listProduct.colors.length ; i ++) {
     let colorChoice = document.createElement("option");
     colorChoice.value =  listProduct.colors[i]; 
@@ -51,14 +49,13 @@ function afficheProduit (listProduct) {
   
  
   }
-  let colorChoice = document.createElement("option");
-  console.log(colorChoice);
-
+ 
 
 }
 
 
 //------gestion du panier ------//
+
 
 
 
@@ -68,11 +65,8 @@ let addToCartBtn= document.querySelector("#addToCart")
 addToCartBtn.addEventListener("click", () => {
   if (quantity.value > 0 && quantity.value < 100) {
  //récuperation des options choisies par le client sous la forme d'un objet
-let itemTitle= document.querySelector("#title");
-let colorOption = document.querySelector("#colors");
-let itemPrice= document.querySelector("#price");
-let itemImg = document.querySelector(".item__img");
 
+console.log ( imagetest);
 
 let productAdded = {
   name: itemTitle.textContent, 
@@ -80,14 +74,15 @@ let productAdded = {
   quantity: quantity.value,
   color: colorOption.textContent, 
   price: itemPrice.innerHTML,
-  imageSrc :image.src,
-  imageAlt : image.alt,
+  imagetest : document.getElementsByTagName('img').src,
+  //imagetest : document.querySelector(".item__img").value,
+  
  
  
  }
 
 
- console.log(productAdded);
+
 
 
  //--------------Local Storage------------/

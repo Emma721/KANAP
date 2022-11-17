@@ -26,8 +26,8 @@ if(produitEnregistreLS === null){
     articleCard.appendChild (imageContainer);
 
        let imageCart = document.createElement ('img');
-        imageCart.src= produitEnregistreLS[b].imageSrc;
-        //imageCart.alt= produitEnregistreLS[b].imageAlt;
+        //imageCart.src= produitEnregistreLS.imagetest;
+        //imageCart.alt= produitEnregistreLS.textAlt[b];
         imageContainer.appendChild (imageCart); 
 
 
@@ -84,7 +84,6 @@ if(produitEnregistreLS === null){
 
 
 
-
 let totalPriceCalcul = [] ;
           
 //Aller chercher tous les prix qu'il y a dans le panier
@@ -134,8 +133,7 @@ let totalQuantityText = document.querySelector ('#totalQuantity');
 totalQuantityText.textContent = totalQuantity;
 
 
-//message d'erreur avec une conditionelle 
-let messageErreur = document.getElementById ('firstNameErrorMsg');
+
 
 
 //--------------------------------modification du panier -------------------------------------------------------------//
@@ -163,3 +161,176 @@ function removeItem() {
 
 
 //récuperer les données du formulaire et les envoyer dans le LS
+
+let affichageFormulaireHtml = () => { 
+let vaVersFormulaire = document.querySelector(".cart__order");
+
+let structureFormulaire = `
+        <div class="cart__order">
+              <form method="get" class="cart__order__form">
+                <div class="cart__order__form__question">
+                  <label for="firstName">Prénom: </label>
+                  <input type="text" name="firstName" id="firstName" required>
+                  <p id="firstNameErrorMsg"><!-- ci est un message d'erreur --></p>
+                </div>
+                <div class="cart__order__form__question">
+                  <label for="lastName">Nom: </label>
+                  <input type="text" name="lastName" id="lastName" required>
+                  <p id="lastNameErrorMsg"></p>
+                </div>
+                <div class="cart__order__form__question">
+                  <label for="address">Adresse: </label>
+                  <input type="text" name="address" id="address" required>
+                  <p id="addressErrorMsg"></p>
+                </div>
+                <div class="cart__order__form__question">
+                  <label for="city">Ville: </label>
+                  <input type="text" name="city" id="city" required>
+                  <p id="cityErrorMsg"></p>
+                </div>
+                <div class="cart__order__form__question">
+                  <label for="email">Email: </label>
+                  <input type="email" name="email" id="email" required>
+                  <p id="emailErrorMsg"></p>
+                </div>
+                <div class="cart__order__form__submit">
+                  <input type="submit" value="Commander !" id="order">
+                </div>
+              </form>
+            </div>
+       `;
+            //injection HTML 
+//vaVersFormulaire.insertAdjacentHTML("afterend", structureFormulaire);
+
+};
+
+//affichage du formulaire 
+affichageFormulaireHtml();
+//selection du btnCommander pour pouvoir actionner l'envoi de données dans le local storage quand on clique dessus
+let btnCommander = document.querySelector (".cart__order__form__submit");
+console.log ( btnCommander);
+
+//----------------add Event Listener ----------------//
+
+btnCommander.addEventListener("click", (e)=> {
+    e.preventDefault();
+
+//recuperation des valeurs du formulaire qnd il a été rempli, et les garder dans une variable. 
+//la récuperation se fait en créant un objet, où tu mets la direction de l'info que tu veux récuperer, 
+//et vu que tu veux récuperer pas seulement la direction d'une donnée x, mais aussi ce qu'il y a à l'intérieur , tu mets <.value>
+let formulaireData = {
+    prenom: document.querySelector("#firstName").value,
+    nom:document.querySelector("#lastName").value,
+    address:document.querySelector("#address").value,
+    city: document.querySelector("#city").value,
+    email:document.querySelector("#email").value,
+    order: document.querySelector("#order").value,
+}
+
+//vérification du formulaire avant d'envoyer l'objet dans le local storage
+//=> en utilisant les expressions régulières (regex) 
+
+//Message erreur
+
+const textAlert = (value) => {
+    return `${value} non valide`;
+}
+
+//PRENOM
+function prenomVerif(){
+let lePrenom = formulaireData.prenom;
+if (/^[A-Za-z]{3,20}$/.test(lePrenom)){
+    return true; 
+}else {
+        document.querySelector("#firstNameErrorMsg").textContent = 'Prénom non valide';
+            //alert(textAlert ("Prénom"));
+        return false;
+}
+};
+
+
+//NOM
+function nomVerif(){
+let leNom = formulaireData.nom;
+if (/^[A-Za-z\s]{3,20}$/.test(leNom)){   
+    return true;
+}else {   
+    document.querySelector("#lastNameErrorMsg").textContent = 'Nom non valide';
+    //alert(textAlert ("Nom"));
+    return false;
+}
+};
+
+//CITY
+function villeVerif(){
+let laVille = formulaireData.city;
+if (/^[A-Za-z]{3,20}$/.test(laVille)){
+    return true;
+}else {    
+    document.querySelector("#cityErrorMsg").textContent = 'Ville non valide';
+    //alert(textAlert ("Ville"));
+    return false;
+}
+};
+
+//EMAIL
+function emailVerif(){
+    let lemail = formulaireData.email;
+    if (/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(lemail)){
+        return true;
+    }else {    
+        document.querySelector("#emailErrorMsg").textContent = 'Email non valide';
+        //alert(textAlert ("Email"));
+        return false;
+    }
+    };
+
+//ADRESSE
+function adresseVerif(){
+    let ladress = formulaireData.address;
+    if (/^[A-Za-z0-9\s]{5,50}$/.test(ladress)){
+        return true;
+    }else {    
+        document.querySelector("#addressErrorMsg").textContent = 'Adresse non valide';
+        //alert(textAlert ("Adresse"));
+        return false;
+    }
+    };
+
+
+
+
+//pour envoyer l'objet ( le formulaire rempli) dans le LS
+//creer une key pour le LS, et mettre toutes les valeurs recupérés du formulaire qui a été rempli. 
+if(prenomVerif() && nomVerif() && villeVerif() && adresseVerif() && emailVerif()){
+    localStorage.setItem("formulaireDataKey", JSON.stringify(formulaireData));
+}else {
+    //message erreur 
+    //alert("Veuillez bien remplir le formulaire");
+}
+
+
+
+
+//ENVOYER les données au serveur 
+//une fois le formulaire remplit, mettre ces infos là dans un objet pour l'envoyer au serveur et que la commande puisse être enregistré sous la forme d'objet
+//et envoyé dans la localstorage
+let aEnvoyer = {
+    produitEnregistreLS, 
+    formulaireData
+}
+
+console.log("aEnvoyer");
+console.log(aEnvoyer);
+//envoi de l'objet vers le serveur 
+
+})
+
+
+
+
+
+
+
+
+//--------------------------------envoi du formulaire  -------------------------------------------------------------//
