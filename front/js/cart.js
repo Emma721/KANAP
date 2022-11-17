@@ -1,12 +1,10 @@
 
-
-
-//------------creating the html card 
-
-//------------afficher les produits ajoutés au panier 
+//--------------------------------affichage card panier-------------------------------------------------------------//
 
 let produitEnregistreLS = JSON.parse(localStorage.getItem("product"));
 let cardCart = document.querySelector ('#cart__items');
+
+
 
 
 if(produitEnregistreLS === null){
@@ -16,19 +14,20 @@ if(produitEnregistreLS === null){
     let structureProduitPanier = [];
 
     for(b = 0; b < produitEnregistreLS.length; b++){
-        let articleCard = document.createElement('article');
-articleCard.classList.add ("cart__item");
-//should I add an id? 
-//data color? 
-cart__items.appendChild (articleCard);
+    
+    let articleCard = document.createElement('article');
+    articleCard.classList.add ("cart__item");
+    //should I add an id? 
+    //data color? 
+    cart__items.appendChild (articleCard);
 
     let imageContainer = document.createElement ('div');
     imageContainer.classList.add ("cart__item__img");
     articleCard.appendChild (imageContainer);
 
        let imageCart = document.createElement ('img');
-        imageCart.src=  produitEnregistreLS[b].imageU;
-        imageCart.alt= produitEnregistreLS[b].altTxt ;
+        imageCart.src= produitEnregistreLS[b].imageSrc;
+        //imageCart.alt= produitEnregistreLS[b].imageAlt;
         imageContainer.appendChild (imageCart); 
 
 
@@ -45,25 +44,30 @@ cart__items.appendChild (articleCard);
             contentDescription.appendChild(cartH2);
 
             let cartColor = document.createElement ("p");
-            cartColor.textContent =produitEnregistreLS[b] .colors ;
+            cartColor.textContent = produitEnregistreLS[b].color ;
             contentDescription.appendChild(cartColor);
 
             let cartPrice = document.createElement ("p");
-            cartPrice.textContent =  produitEnregistreLS[b] .price;
+            cartPrice.textContent =  produitEnregistreLS[b].price;
             contentDescription.appendChild(cartPrice); 
 
     let contentSettings = document.createElement ("div");
     contentSettings.classList.add ("cart__item__content__settings");
-    articleCard.appendChild(contentSettings);
+    contentContainer.appendChild(contentSettings);
 
        let cartQuantity = document.createElement ("div");
         cartQuantity.classList.add ("cart__item__content__settings_quantity");
         contentSettings.appendChild( cartQuantity);
 
             let cartAfficheQuantite = document.createElement ("p");
-            cartAfficheQuantite.textContent = produitEnregistreLS[b] .quantity;
-            contentSettings.appendChild(cartAfficheQuantite);
-            //input type   
+            cartAfficheQuantite.textContent = 'Qté : ' + produitEnregistreLS[b] .quantity;
+            cartQuantity.appendChild(cartAfficheQuantite);
+            
+            let inputQuantite = document.createElement('input');
+            //inputQuantite.type.add = number;
+            inputQuantite.classList.add('itemQuantity');
+            //inputQuantite.name = 'itemQuantity';
+            cartQuantity.appendChild(inputQuantite);
 
         let cartDelete= document.createElement ("div");
         cartDelete.classList.add ("cart__item__content__settings_delete");
@@ -72,29 +76,90 @@ cart__items.appendChild (articleCard);
             let deleteItem = document.createElement ("p");
             deleteItem.classList.add ('deleteItem');
             deleteItem.textContent = "Suprimer";
+            cartDelete.appendChild(deleteItem);
     }
+
+    
+}
+
+
+
+
+let totalPriceCalcul = [] ;
+          
+//Aller chercher tous les prix qu'il y a dans le panier
+for ( let c = 0; c < produitEnregistreLS.length; c++){ 
+    let totalPriceInsideCart =  produitEnregistreLS[c].price;
+
+    //mettre les prix du panier dans le tableau totalPriceCalcul methode reduce
+    totalPriceCalcul.push(totalPriceInsideCart);
+    console.log(totalPriceCalcul);        
+    
+
 
 }
 
-//--------------------------------old code-------------------------------------------------------------//
+//addition des prix
 
-//insertion des elemtns de la card du produit dans la page produit 
-let totalQuantity = document.getElementById ('totalQuantity');
-let totalPrice = document.getElementById ( 'totalPrice'); 
+
+    const reducer = (accumulator, currentValue) => accumulator + currentValue ;
+    const totalPrice = totalPriceCalcul.reduce(reducer,0);
+    console.log(totalPrice);
+    
+    let totalPriceText = document.querySelector ('#totalPrice');
+    totalPriceText.textContent = totalPrice ;
+    
+
+
+let totalQuantityCalcul = [] ;
+            
+//Aller chercher tous les prix qu'il y a dans le panier
+for ( let c = 0; c < produitEnregistreLS.length; c++){ 
+    let totalQuantityInsideCart =  produitEnregistreLS[c].quantity;
+
+//mettre les prix du panier dans le tableau totalPriceCalcul methode reduce
+    totalQuantityCalcul.push(totalQuantityInsideCart);
+    console.log(totalQuantityCalcul);            
+}
+
+
+
+//addition de la quantité du tableau 
+
+const reducer2 = (accumulator, currentValue) => accumulator + currentValue ;
+const totalQuantity = totalQuantityCalcul.reduce(reducer2,0);
+console.log(totalQuantity);
+
+let totalQuantityText = document.querySelector ('#totalQuantity');
+totalQuantityText.textContent = totalQuantity;
+
+
+//message d'erreur avec une conditionelle 
 let messageErreur = document.getElementById ('firstNameErrorMsg');
 
 
-function afficheRecapitulatif ( ){
-    //function somme pour obtenir total quantity 
-    // fnct somme pour obtenir total price 
-
-};
-
-//il te manque le prix total de tous les elements de ta commande 
-// ainsi que la quantite totale de produits 
-//both selecteurs sont tout en haut 
+//--------------------------------modification du panier -------------------------------------------------------------//
 
 
+/*
+let deleteItem = document.querySelectorAll (".deleteItem");
+console.log(deleteItem);
 
-//Attention à ne pas stocker le prix des articles en local. Les données stockées en local ne
-//sont pas sécurisées et l’utilisateur pourrait alors modifier le prix lui-même.*/
+
+for(let l = 0; l <deleteItem.length; l++){
+    deleteItem[l].addEventListener ("click",()=>{
+        //add event prevent default? 
+
+    })
+}
+
+
+function removeItem() {
+
+}
+*/
+
+//--------------------------------formulaire-------------------------------------------------------------//
+
+
+//récuperer les données du formulaire et les envoyer dans le LS

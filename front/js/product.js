@@ -1,6 +1,6 @@
 let params = (new URL(document.location)).searchParams;
 let id = params.get('id'); 
-console.log(id)
+
 
 
 fetch("http://localhost:3000/api/products/" + id)
@@ -30,10 +30,10 @@ function afficheProduit (listProduct) {
   let itemImg = document.querySelector(".item__img")
 
   //creating the img element 
-  let imgOneProduct = document.createElement('img');
-  imgOneProduct.src = listProduct.imageUrl ;
-  imgOneProduct.alt = listProduct.altTxt ;
-  itemImg.appendChild(imgOneProduct);
+  let image = document.createElement('img');
+  image.src = listProduct.imageUrl ;
+  image.alt = listProduct.altTxt ;
+  itemImg.appendChild(image);
 
   //inserting the other elements
   itemTitle.textContent = listProduct.name;
@@ -60,7 +60,7 @@ function afficheProduit (listProduct) {
 
 //------gestion du panier ------//
 
-console.log(imgOneProduct);
+
 
 //function addToCart (){ 
 
@@ -74,22 +74,20 @@ let itemPrice= document.querySelector("#price");
 let itemImg = document.querySelector(".item__img");
 
 
-
 let productAdded = {
   name: itemTitle.textContent, 
   _id: id,
   quantity: quantity.value,
   color: colorOption.textContent, 
   price: itemPrice.innerHTML,
-  imageSrc : itemImg.src,
-  imageAlt: itemImg.alt,
-  
+  imageSrc :image.src,
+  imageAlt : image.alt,
  
  
  }
 
- console.log(productAdded);
 
+ console.log(productAdded);
 
 
  //--------------Local Storage------------/
