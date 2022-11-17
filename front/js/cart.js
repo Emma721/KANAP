@@ -64,9 +64,9 @@ if(produitEnregistreLS === null){
             cartQuantity.appendChild(cartAfficheQuantite);
             
             let inputQuantite = document.createElement('input');
-            //inputQuantite.type.add = number;
+            inputQuantite.type = "number";
             inputQuantite.classList.add('itemQuantity');
-            //inputQuantite.name = 'itemQuantity';
+            inputQuantite.name = 'itemQuantity';
             cartQuantity.appendChild(inputQuantite);
 
         let cartDelete= document.createElement ("div");
@@ -87,7 +87,7 @@ if(produitEnregistreLS === null){
 let totalPriceCalcul = [] ;
           
 //Aller chercher tous les prix qu'il y a dans le panier
-for ( let c = 0; c < produitEnregistreLS.length; c++){ 
+/*for ( let c = 0; c < produitEnregistreLS.length; c++){ 
     let totalPriceInsideCart =  produitEnregistreLS[c].price;
 
     //mettre les prix du panier dans le tableau totalPriceCalcul methode reduce
@@ -97,7 +97,7 @@ for ( let c = 0; c < produitEnregistreLS.length; c++){
 
 
 }
-
+*/
 //addition des prix
 
 
@@ -138,24 +138,45 @@ totalQuantityText.textContent = totalQuantity;
 
 //--------------------------------modification du panier -------------------------------------------------------------//
 
+//recuperer l'id du produit (product added) avec data-id et data-color dans cart__item
+
+//recuperer localisation de value of input 
+let newQuantity = document.querySelector('.itemQuantity').value; 
+//recuperer la nouvelle valeur selectionne 
+let choiceQuantity = newQuantity;
 
 /*
+newQuantity.addEventListener ("click", () => {
+    if (newQuantity > 0 ) {
+        quantity= newQuantity;
+    } else {
+            quantity= quantity.value;
+    }
+});
+
+
+*/
+
+console.log ("choiceQuantity");
+console.log (choiceQuantity);
+
+//recuperer la localisation du btn supprimer
 let deleteItem = document.querySelectorAll (".deleteItem");
 console.log(deleteItem);
 
 
-for(let l = 0; l <deleteItem.length; l++){
-    deleteItem[l].addEventListener ("click",()=>{
-        //add event prevent default? 
 
-    })
-}
+//if there's an input inside <inputQuantite> that is different 
+//from the qntity already chosen for a given product <produitEnregistreLS[b] .quantity)>
+//then change quantity in object LS from the previus value to the new one selected in input. 
+//change cartAfficheQuantite.textContent = 'Qté : ' + produitEnregistreLS[b] .quantity; to the new produitenregistre's amount
 
 
-function removeItem() {
 
-}
-*/
+//if product added 1 and product added 2's colors are the same then keep only product one and add to 
+//its quantity the quantity selected for product 2 
+
+//if product added 1 === product added 2 then only keep product 1 (so they don't duplicate)
 
 //--------------------------------formulaire-------------------------------------------------------------//
 
@@ -165,7 +186,7 @@ function removeItem() {
 let affichageFormulaireHtml = () => { 
 let vaVersFormulaire = document.querySelector(".cart__order");
 
-let structureFormulaire = `
+/*let structureFormulaire = `
         <div class="cart__order">
               <form method="get" class="cart__order__form">
                 <div class="cart__order__form__question">
@@ -202,10 +223,12 @@ let structureFormulaire = `
             //injection HTML 
 //vaVersFormulaire.insertAdjacentHTML("afterend", structureFormulaire);
 
-};
+};*/
 
 //affichage du formulaire 
-affichageFormulaireHtml();
+//affichageFormulaireHtml();
+
+
 //selection du btnCommander pour pouvoir actionner l'envoi de données dans le local storage quand on clique dessus
 let btnCommander = document.querySelector (".cart__order__form__submit");
 console.log ( btnCommander);
@@ -214,6 +237,7 @@ console.log ( btnCommander);
 
 btnCommander.addEventListener("click", (e)=> {
     e.preventDefault();
+
 
 //recuperation des valeurs du formulaire qnd il a été rempli, et les garder dans une variable. 
 //la récuperation se fait en créant un objet, où tu mets la direction de l'info que tu veux récuperer, 
@@ -232,9 +256,9 @@ let formulaireData = {
 
 //Message erreur
 
-const textAlert = (value) => {
+/*const textAlert = (value) => {
     return `${value} non valide`;
-}
+}*/
 
 //PRENOM
 function prenomVerif(){
@@ -309,8 +333,7 @@ if(prenomVerif() && nomVerif() && villeVerif() && adresseVerif() && emailVerif()
     //alert("Veuillez bien remplir le formulaire");
 }
 
-
-
+//--------------------------------envoi du formulaire  -------------------------------------------------------------//
 
 //ENVOYER les données au serveur 
 //une fois le formulaire remplit, mettre ces infos là dans un objet pour l'envoyer au serveur et que la commande puisse être enregistré sous la forme d'objet
@@ -323,14 +346,19 @@ let aEnvoyer = {
 console.log("aEnvoyer");
 console.log(aEnvoyer);
 //envoi de l'objet vers le serveur 
+let promise01 = fetch (" http://localhost:3000/api/products", {
+    method : "POST",
+    body : JSON.stringify(aEnvoyer),
+    headers : {
+        "Content-Type" : "application/json",
+    },
+
+    //pour voir le resultat du serveur dans la controle
+
+
+});
+
+
 
 })
-
-
-
-
-
-
-
-
-//--------------------------------envoi du formulaire  -------------------------------------------------------------//
+};
