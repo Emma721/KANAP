@@ -11,23 +11,25 @@ if(produitEnregistreLS === null){
     console.log("je suis vide");
 }else {
     
-    let structureProduitPanier = [];
+    //let structureProduitPanier = [];
 
     for(b = 0; b < produitEnregistreLS.length; b++){
-    
+     
+
     let articleCard = document.createElement('article');
     articleCard.classList.add ("cart__item");
-    //should I add an id? 
-    //data color? 
+    articleCard.id = produitEnregistreLS[b]._id; 
+    articleCard.color=produitEnregistreLS[b].color; 
     cart__items.appendChild (articleCard);
 
     let imageContainer = document.createElement ('div');
     imageContainer.classList.add ("cart__item__img");
     articleCard.appendChild (imageContainer);
+    
 
        let imageCart = document.createElement ('img');
-        //imageCart.src= produitEnregistreLS.imagetest;
-        //imageCart.alt= produitEnregistreLS.textAlt[b];
+        imageCart.src= produitEnregistreLS[b].image;
+        imageCart.alt= produitEnregistreLS[b].image;
         imageContainer.appendChild (imageCart); 
 
 
@@ -83,26 +85,27 @@ if(produitEnregistreLS === null){
 }
 
 
-
 let totalPriceCalcul = [] ;
           
 //Aller chercher tous les prix qu'il y a dans le panier
-/*for ( let c = 0; c < produitEnregistreLS.length; c++){ 
+for ( let c = 0; c < produitEnregistreLS.length; c++){ 
     let totalPriceInsideCart =  produitEnregistreLS[c].price;
+    console.log(totalPriceInsideCart);
 
-    //mettre les prix du panier dans le tableau totalPriceCalcul methode reduce
+    //mettre les prix du panier dans le tableau totalPriceCalcul methode .reduce
     totalPriceCalcul.push(totalPriceInsideCart);
     console.log(totalPriceCalcul);        
     
 
 
 }
-*/
+
 //addition des prix
 
 
     const reducer = (accumulator, currentValue) => accumulator + currentValue ;
-    const totalPrice = totalPriceCalcul.reduce(reducer,0);
+    console.log(reducer);
+    const totalPrice = totalPriceCalcul.reduce(reducer);
     console.log(totalPrice);
     
     let totalPriceText = document.querySelector ('#totalPrice');
@@ -110,13 +113,20 @@ let totalPriceCalcul = [] ;
     
 
 
+
+
+
+
+
+
+
 let totalQuantityCalcul = [] ;
             
-//Aller chercher tous les prix qu'il y a dans le panier
+//Aller chercher la quantité totale qu'il y a dans le panier
 for ( let c = 0; c < produitEnregistreLS.length; c++){ 
     let totalQuantityInsideCart =  produitEnregistreLS[c].quantity;
 
-//mettre les prix du panier dans le tableau totalPriceCalcul methode reduce
+//mettre les quantites dns tableau totalQuantity Calcul. methode reduce
     totalQuantityCalcul.push(totalQuantityInsideCart);
     console.log(totalQuantityCalcul);            
 }
@@ -181,54 +191,6 @@ console.log(deleteItem);
 //--------------------------------formulaire-------------------------------------------------------------//
 
 
-//récuperer les données du formulaire et les envoyer dans le LS
-
-let affichageFormulaireHtml = () => { 
-let vaVersFormulaire = document.querySelector(".cart__order");
-
-/*let structureFormulaire = `
-        <div class="cart__order">
-              <form method="get" class="cart__order__form">
-                <div class="cart__order__form__question">
-                  <label for="firstName">Prénom: </label>
-                  <input type="text" name="firstName" id="firstName" required>
-                  <p id="firstNameErrorMsg"><!-- ci est un message d'erreur --></p>
-                </div>
-                <div class="cart__order__form__question">
-                  <label for="lastName">Nom: </label>
-                  <input type="text" name="lastName" id="lastName" required>
-                  <p id="lastNameErrorMsg"></p>
-                </div>
-                <div class="cart__order__form__question">
-                  <label for="address">Adresse: </label>
-                  <input type="text" name="address" id="address" required>
-                  <p id="addressErrorMsg"></p>
-                </div>
-                <div class="cart__order__form__question">
-                  <label for="city">Ville: </label>
-                  <input type="text" name="city" id="city" required>
-                  <p id="cityErrorMsg"></p>
-                </div>
-                <div class="cart__order__form__question">
-                  <label for="email">Email: </label>
-                  <input type="email" name="email" id="email" required>
-                  <p id="emailErrorMsg"></p>
-                </div>
-                <div class="cart__order__form__submit">
-                  <input type="submit" value="Commander !" id="order">
-                </div>
-              </form>
-            </div>
-       `;
-            //injection HTML 
-//vaVersFormulaire.insertAdjacentHTML("afterend", structureFormulaire);
-
-};*/
-
-//affichage du formulaire 
-//affichageFormulaireHtml();
-
-
 //selection du btnCommander pour pouvoir actionner l'envoi de données dans le local storage quand on clique dessus
 let btnCommander = document.querySelector (".cart__order__form__submit");
 console.log ( btnCommander);
@@ -242,27 +204,26 @@ btnCommander.addEventListener("click", (e)=> {
 //recuperation des valeurs du formulaire qnd il a été rempli, et les garder dans une variable. 
 //la récuperation se fait en créant un objet, où tu mets la direction de l'info que tu veux récuperer, 
 //et vu que tu veux récuperer pas seulement la direction d'une donnée x, mais aussi ce qu'il y a à l'intérieur , tu mets <.value>
-let formulaireData = {
-    prenom: document.querySelector("#firstName").value,
-    nom:document.querySelector("#lastName").value,
-    address:document.querySelector("#address").value,
-    city: document.querySelector("#city").value,
-    email:document.querySelector("#email").value,
-    order: document.querySelector("#order").value,
+let contactLocation = {
+    inputPrenom: document.querySelector("#firstName").value,
+    inputNom:document.querySelector("#lastName").value,
+    inputAddress:document.querySelector("#address").value,
+    inputCity: document.querySelector("#city").value,
+    inputEmail:document.querySelector("#email").value,
+    inputOrder: document.querySelector("#order").value,
+    
 }
+
+
 
 //vérification du formulaire avant d'envoyer l'objet dans le local storage
 //=> en utilisant les expressions régulières (regex) 
 
-//Message erreur
 
-/*const textAlert = (value) => {
-    return `${value} non valide`;
-}*/
 
 //PRENOM
 function prenomVerif(){
-let lePrenom = formulaireData.prenom;
+let lePrenom = contactLocation.prenom;
 if (/^[A-Za-z]{3,20}$/.test(lePrenom)){
     return true; 
 }else {
@@ -275,7 +236,7 @@ if (/^[A-Za-z]{3,20}$/.test(lePrenom)){
 
 //NOM
 function nomVerif(){
-let leNom = formulaireData.nom;
+let leNom = contactLocation.nom;
 if (/^[A-Za-z\s]{3,20}$/.test(leNom)){   
     return true;
 }else {   
@@ -287,7 +248,7 @@ if (/^[A-Za-z\s]{3,20}$/.test(leNom)){
 
 //CITY
 function villeVerif(){
-let laVille = formulaireData.city;
+let laVille = contactLocation.city;
 if (/^[A-Za-z]{3,20}$/.test(laVille)){
     return true;
 }else {    
@@ -299,7 +260,7 @@ if (/^[A-Za-z]{3,20}$/.test(laVille)){
 
 //EMAIL
 function emailVerif(){
-    let lemail = formulaireData.email;
+    let lemail = contactLocation.email;
     if (/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(lemail)){
         return true;
     }else {    
@@ -311,7 +272,7 @@ function emailVerif(){
 
 //ADRESSE
 function adresseVerif(){
-    let ladress = formulaireData.address;
+    let ladress = contactLocation.address;
     if (/^[A-Za-z0-9\s]{5,50}$/.test(ladress)){
         return true;
     }else {    
@@ -327,38 +288,68 @@ function adresseVerif(){
 //pour envoyer l'objet ( le formulaire rempli) dans le LS
 //creer une key pour le LS, et mettre toutes les valeurs recupérés du formulaire qui a été rempli. 
 if(prenomVerif() && nomVerif() && villeVerif() && adresseVerif() && emailVerif()){
-    localStorage.setItem("formulaireDataKey", JSON.stringify(formulaireData));
+    localStorage.setItem("formulaireDataKey", JSON.stringify(contactLocation));
 }else {
     //message erreur 
     //alert("Veuillez bien remplir le formulaire");
 }
+;
 
 //--------------------------------envoi du formulaire  -------------------------------------------------------------//
 
-//ENVOYER les données au serveur 
-//une fois le formulaire remplit, mettre ces infos là dans un objet pour l'envoyer au serveur et que la commande puisse être enregistré sous la forme d'objet
-//et envoyé dans la localstorage
-let aEnvoyer = {
-    produitEnregistreLS, 
-    formulaireData
-}
 
-console.log("aEnvoyer");
-console.log(aEnvoyer);
+//declaration des données obtenues dans le formulaire
+let inputPrenom =document.querySelector("#firstName").value;
+let inputNom=document.querySelector("#lastName").value;
+let inputAddress=document.querySelector("#address").value;
+let inputCity= document.querySelector("#city").value;
+let inputEmail=document.querySelector("#email").value;
+//let   inputOrder= document.querySelector("#order").value;
+
+// THERE4S SOMETHJING GOING ON WITH SELECTINOF THEH ID OF THE PRODCUT thzt doesn't make the resquest post work??? 
+
+//tableau pour sauvegarder les données du produit(s) choisis par le client
+let produitAchete = [];
+produitAchete.push(produitEnregistreLS);
+
+
+//--------------------------------creation de l'objet à envoyer contenant le panier et le formulaire  ---------------------------//
+//objet pour sauvegarder les données du formulaire
+// et le tableau avec les infos du produit enregistré 
+//pour que la commande puisse être enregistré dns LS comme un seul objet
+const order = {
+    contact: {   
+      firstName: inputPrenom.value,
+      lastName: inputNom.value,
+      city: inputCity.value,
+      address: inputAddress.value,
+      email: inputEmail.value,
+
+},
+
+    produits : produitAchete,
+};
+
+
 //envoi de l'objet vers le serveur 
-let promise01 = fetch (" http://localhost:3000/api/products", {
+/*let promise01 =*/ 
+fetch ("http://localhost:3000/api/products/order", {
     method : "POST",
-    body : JSON.stringify(aEnvoyer),
-    headers : {
-        "Content-Type" : "application/json",
+    headers: { 
+        'Accept' : "application/json",
+        "Content-Type" : "application/json"
     },
+    body : JSON.stringify(order)
 
-    //pour voir le resultat du serveur dans la controle
-
+}).then((response)=> {
+    return response.json();
+})
+.then((data)=> {
+    console.log(data);  
+})
+.catch((error)=> {
+    console.log(error);
+});
 
 });
 
-
-
-})
-};

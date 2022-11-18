@@ -18,6 +18,7 @@ fetch("http://localhost:3000/api/products/" + id)
   })
   .catch((err)=> console.log(err));
 
+
 function afficheProduit (listProduct) {
 
   //selecteurs
@@ -26,14 +27,22 @@ function afficheProduit (listProduct) {
   let itemPrice= document.querySelector("#price");
   let itemDescription= document.querySelector("#description");
   let colorOption = document.querySelector("#colors");
-  let itemImageLocation = document.querySelector(".item__img");
+  let imageMotherPlace = document.querySelector(".item__img");
 
-
+  console.log("imageMotherPlace");
+  console.log(imageMotherPlace);
+ 
   //creating the img element 
   let itemImage = document.createElement('img');
   itemImage.src = listProduct.imageUrl ;
   itemImage.alt = listProduct.altTxt ;
-  itemImageLocation.appendChild(itemImage);
+  imageMotherPlace.appendChild(itemImage);
+
+  console.log("itemImage");
+  console.log(itemImage);
+
+  console.log("listProduct.imageUrl");
+  console.log(listProduct.imageUrl);
 
   //inserting the other elements
   itemTitle.textContent = listProduct.name;
@@ -51,7 +60,7 @@ function afficheProduit (listProduct) {
   }
  
 
-}
+
 
 
 //------gestion du panier ------//
@@ -66,23 +75,24 @@ addToCartBtn.addEventListener("click", () => {
   if (quantity.value > 0 && quantity.value < 100) {
  //récuperation des options choisies par le client sous la forme d'un objet
 
-console.log ( imagetest);
+ let itemTitle= document.querySelector("#title");
+ let itemPrice= document.querySelector("#price");
+ //let itemDescription= document.querySelector("#description");
+ let colorOption = document.querySelector("#colors");
+ //let itemImage = document.querySelectorAll("img");
+
+
 
 let productAdded = {
   name: itemTitle.textContent, 
   _id: id,
   quantity: quantity.value,
-  color: colorOption.textContent, 
+  color: colorOption.value, 
   price: itemPrice.innerHTML,
-  imagetest : document.getElementsByTagName('img').src,
-  //imagetest : document.querySelector(".item__img").value,
-  
- 
+  image :  itemImage.src,
+
  
  }
-
-
-
 
 
  //--------------Local Storage------------/
@@ -114,5 +124,6 @@ console.log(produitEnregistreLS);
 });
 
 
+}
 
 
