@@ -84,6 +84,7 @@ if(produitEnregistreLS === null){
     
 }
 
+//--------------------------------calcul total du prix et de la quantité -------------------------------------------------------------//
 
 let totalPriceCalcul = [] ;
           
@@ -101,23 +102,17 @@ for ( let c = 0; c < produitEnregistreLS.length; c++){
 }
 
 //addition des prix
-
+/*
 
     const reducer = (accumulator, currentValue) => accumulator + currentValue ;
     console.log(reducer);
-    const totalPrice = totalPriceCalcul.reduce(reducer);
+    const totalPrice = totalPriceCalcul.reduce(reducer,0);
     console.log(totalPrice);
-    
+
+//insertion du résultat dans l'affichage
     let totalPriceText = document.querySelector ('#totalPrice');
     totalPriceText.textContent = totalPrice ;
     
-
-
-
-
-
-
-
 
 
 let totalQuantityCalcul = [] ;
@@ -139,54 +134,125 @@ const reducer2 = (accumulator, currentValue) => accumulator + currentValue ;
 const totalQuantity = totalQuantityCalcul.reduce(reducer2,0);
 console.log(totalQuantity);
 
+
+//insertion du résultat dans l'affichage
 let totalQuantityText = document.querySelector ('#totalQuantity');
 totalQuantityText.textContent = totalQuantity;
 
-
+*/
 
 
 
 //--------------------------------modification du panier -------------------------------------------------------------//
 
-//recuperer l'id du produit (product added) avec data-id et data-color dans cart__item
+//changer basket par pro
+    
+    function saveBasket(produitEnregistreLS) {
+    localStorage.setItem( "product", JSON.stringify("produitEnregistreLS"));
+    
+}
+console.log(saveBasket);
 
-//recuperer localisation de value of input 
-let newQuantity = document.querySelector('.itemQuantity').value; 
-//recuperer la nouvelle valeur selectionne 
-let choiceQuantity = newQuantity;
+
+//get the quantity of the product added to the cart ( from LS)
+function getBasketLS () {
+    let basketQuantity = JSON.parse(localStorage.getItem("product[b].quantity"));   
+    if(basket == nul){
+        return [];
+    }else {
+        return JSON.parse(localStorage.getItem (product[b].quantity));   
+    }
+    
+}
+console.log(getBasketLS);
+
+
+
+// si tu ajoutes le meme produit, actualiser la quantité au lieu d'en ajouter deux fois le même dans le panier  
+function addBasket (product ){
+    let basket = getBasketLS();
+    let findProduct = product.find( p => p.id == product.id);
+    if (findProduct != undefined){
+        findProduct.quantity ++; //p.quantity + product.quantity ?
+    }else {
+        product.quantity = product[b].quantity;
+        basket.push(product[b].quantity);
+    }
+    saveBasket(basket);
+
+}
+
+//pour retirer un produit 
+function removeFromBasket (product){
+    //let btnDeleteItem = document.querySelectorAll (".deleteItem");
+    addEventListener("click", (btnDeleteItem) => {
+    let basket = getBasketLS();
+    basket = basket.filter (p => p.id != product.id);
+    saveBasket(basket);
+})}
+
+
+
+function changeQuantity (product,quantity){  
+    let basket = getBasketLS();
+    let findProduct = product.find( p => p.id == product.id);
+    if  (findProduct != undefined){
+        findProduct.quantity += quantity;
+        if(findProduct.quantity <= 0) {
+            removeFromBasket(findProduct);
+        }else {
+            saveBasket(basket);
+        }
+    } 
+    };
+
+//calcul quantité
+
+function getNumberProduct () {
+    //let basket = get basket(); 
+    let number = 0 ;
+    for (let product of produitEnregistreLS){
+        number += product.quantity;
+    }
+    return number ;
+
+}
+
+//insertion du résultat dans l'affichage
+let totalPriceText = document.querySelector ('#totalPrice');
+totalPriceText.textContent = getTotalPrice ();
+
+
+
+
+
+function getTotalPrice (){
+    //let basket = get basket(); 
+    let total = 0 ;
+    for (let product of produitEnregistreLS){
+        total += product.quantity * product.price;
+    }
+    return total;
+}
+
+//insertion du résultat dans l'affichage
+let totalQuantityText = document.querySelector ('#totalQuantity');
+totalQuantityText.textContent = getNumberProduct ();
 
 /*
-newQuantity.addEventListener ("click", () => {
-    if (newQuantity > 0 ) {
-        quantity= newQuantity;
-    } else {
-            quantity= quantity.value;
-    }
-});
+0. what do you want to acomplish ? ( name of the function)
+1. what are the conditions ( conditionals)
+2. what trigers the event? (addEventListener)
+3. where are the things you need (selectors)
+3. how do those thigns need to change? 
+4. where do you want to put them ? 
+5. is it working? 
+6. what part isn't working? 
+
+
 
 
 */
-
-console.log ("choiceQuantity");
-console.log (choiceQuantity);
-
-//recuperer la localisation du btn supprimer
-let deleteItem = document.querySelectorAll (".deleteItem");
-console.log(deleteItem);
-
-
-
-//if there's an input inside <inputQuantite> that is different 
-//from the qntity already chosen for a given product <produitEnregistreLS[b] .quantity)>
-//then change quantity in object LS from the previus value to the new one selected in input. 
-//change cartAfficheQuantite.textContent = 'Qté : ' + produitEnregistreLS[b] .quantity; to the new produitenregistre's amount
-
-
-
-//if product added 1 and product added 2's colors are the same then keep only product one and add to 
-//its quantity the quantity selected for product 2 
-
-//if product added 1 === product added 2 then only keep product 1 (so they don't duplicate)
 
 //--------------------------------formulaire-------------------------------------------------------------//
 
