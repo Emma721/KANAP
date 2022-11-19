@@ -212,7 +212,7 @@ function getNumberProduct () {
     //let basket = get basket(); 
     let number = 0 ;
     for (let product of produitEnregistreLS){
-        number += product.quantity;
+        number += product.quantity ++;
     }
     return number ;
 
