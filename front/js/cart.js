@@ -1,4 +1,3 @@
-
 //--------------------------------affichage card panier-------------------------------------------------------------//
 
 let produitEnregistreLS = JSON.parse(localStorage.getItem("product"));
@@ -62,13 +61,15 @@ if(produitEnregistreLS === null){
         contentSettings.appendChild( cartQuantity);
 
             let cartAfficheQuantite = document.createElement ("p");
-            cartAfficheQuantite.textContent = 'Qté : ' + produitEnregistreLS[b] .quantity;
+            cartAfficheQuantite.textContent = 'Qté : ' ;
+            //ou `Qté :  ${produitEnregistreLS[b] .quantity}`
             cartQuantity.appendChild(cartAfficheQuantite);
             
             let inputQuantite = document.createElement('input');
             inputQuantite.type = "number";
             inputQuantite.classList.add('itemQuantity');
             inputQuantite.name = 'itemQuantity';
+            inputQuantite.value = produitEnregistreLS[b] .quantity;
             cartQuantity.appendChild(inputQuantite);
 
         let cartDelete= document.createElement ("div");
@@ -76,7 +77,7 @@ if(produitEnregistreLS === null){
         contentSettings.appendChild( cartDelete);
             
             let deleteItem = document.createElement ("p");
-            deleteItem.classList.add ('deleteItem');
+            deleteItem.classList.add ("deleteItem");
             deleteItem.textContent = "Suprimer";
             cartDelete.appendChild(deleteItem);
     }
@@ -101,111 +102,6 @@ for ( let c = 0; c < produitEnregistreLS.length; c++){
 
 }
 
-//addition des prix
-/*
-
-    const reducer = (accumulator, currentValue) => accumulator + currentValue ;
-    console.log(reducer);
-    const totalPrice = totalPriceCalcul.reduce(reducer,0);
-    console.log(totalPrice);
-
-//insertion du résultat dans l'affichage
-    let totalPriceText = document.querySelector ('#totalPrice');
-    totalPriceText.textContent = totalPrice ;
-    
-
-
-let totalQuantityCalcul = [] ;
-            
-//Aller chercher la quantité totale qu'il y a dans le panier
-for ( let c = 0; c < produitEnregistreLS.length; c++){ 
-    let totalQuantityInsideCart =  produitEnregistreLS[c].quantity;
-
-//mettre les quantites dns tableau totalQuantity Calcul. methode reduce
-    totalQuantityCalcul.push(totalQuantityInsideCart);
-    console.log(totalQuantityCalcul);            
-}
-
-
-
-//addition de la quantité du tableau 
-
-const reducer2 = (accumulator, currentValue) => accumulator + currentValue ;
-const totalQuantity = totalQuantityCalcul.reduce(reducer2,0);
-console.log(totalQuantity);
-
-
-//insertion du résultat dans l'affichage
-let totalQuantityText = document.querySelector ('#totalQuantity');
-totalQuantityText.textContent = totalQuantity;
-
-*/
-
-
-
-//--------------------------------modification du panier -------------------------------------------------------------//
-
-//changer basket par pro
-    
-    function saveBasket(produitEnregistreLS) {
-    localStorage.setItem( "product", JSON.stringify("produitEnregistreLS"));
-    
-}
-console.log(saveBasket);
-
-
-//get the quantity of the product added to the cart ( from LS)
-function getBasketLS () {
-    let basketQuantity = JSON.parse(localStorage.getItem("product[b].quantity"));   
-    if(basket == nul){
-        return [];
-    }else {
-        return JSON.parse(localStorage.getItem (product[b].quantity));   
-    }
-    
-}
-console.log(getBasketLS);
-
-
-
-// si tu ajoutes le meme produit, actualiser la quantité au lieu d'en ajouter deux fois le même dans le panier  
-function addBasket (product ){
-    let basket = getBasketLS();
-    let findProduct = product.find( p => p.id == product.id);
-    if (findProduct != undefined){
-        findProduct.quantity ++; //p.quantity + product.quantity ?
-    }else {
-        product.quantity = product[b].quantity;
-        basket.push(product[b].quantity);
-    }
-    saveBasket(basket);
-
-}
-
-//pour retirer un produit 
-function removeFromBasket (product){
-    //let btnDeleteItem = document.querySelectorAll (".deleteItem");
-    addEventListener("click", (btnDeleteItem) => {
-    let basket = getBasketLS();
-    basket = basket.filter (p => p.id != product.id);
-    saveBasket(basket);
-})}
-
-
-
-function changeQuantity (product,quantity){  
-    let basket = getBasketLS();
-    let findProduct = product.find( p => p.id == product.id);
-    if  (findProduct != undefined){
-        findProduct.quantity += quantity;
-        if(findProduct.quantity <= 0) {
-            removeFromBasket(findProduct);
-        }else {
-            saveBasket(basket);
-        }
-    } 
-    };
-
 //calcul quantité
 
 function getNumberProduct () {
@@ -223,9 +119,6 @@ let totalPriceText = document.querySelector ('#totalPrice');
 totalPriceText.textContent = getTotalPrice ();
 
 
-
-
-
 function getTotalPrice (){
     //let basket = get basket(); 
     let total = 0 ;
@@ -239,22 +132,56 @@ function getTotalPrice (){
 let totalQuantityText = document.querySelector ('#totalQuantity');
 totalQuantityText.textContent = getNumberProduct ();
 
-/*
-0. what do you want to acomplish ? ( name of the function)
-1. what are the conditions ( conditionals)
-2. what trigers the event? (addEventListener)
-3. where are the things you need (selectors)
-3. how do those thigns need to change? 
-4. where do you want to put them ? 
-5. is it working? 
-6. what part isn't working? 
+
+//--------------------------------modification du panier -------------------------------------------------------------//
+
+// SUPPRIMER PRODUIT 
+
+//selection du "bouton" supprimer 
+let btnSupprimer = document.querySelectorAll (".deleteItem");
+console.log (btnSupprimer);
+
+//parcurir les btn supprimer 
+for (let l= 0 ; l < btnSupprimer.length; l++){
+    btnSupprimer[l].addEventListener ("click", (event) =>{
+        event.preventDefault();
+
+//selection du produit id en particulier 
+        let idProduitASupprimer = produitEnregistreLS[l]._id;
+        console.log("idProduitASupprimer");
+        console.log(idProduitASupprimer);
+
+
+        // supprimer un objet qui est dans un tableau avec la méthode filter : 
+            // filter va créer un nouveau tableau avec les produits differents a celui avec l'idProduitASupprimer 
+        
+        produitEnregistreLS = produitEnregistreLS.filter( element => element.id !== idProduitASupprimer);
+        console.log(produitEnregistreLS);
+
+
+        //on envoie le nouveau tableau dns LS 
+        localStorage.setItem("produit", JSON.stringify (produitEnregistreLS)
+        );
+
+        //recharger la page une fois le produit supprimé
+        window.location.href = "cart.html" ; 
+
+    });
+}
+
+
+
+//PAS DE PRODUIT EN DOUBLE 
 
 
 
 
-*/
+
+//CHANGEMENT DE QUANTITE
+
 
 //--------------------------------formulaire-------------------------------------------------------------//
+
 
 
 //selection du btnCommander pour pouvoir actionner l'envoi de données dans le local storage quand on clique dessus
@@ -418,4 +345,3 @@ fetch ("http://localhost:3000/api/products/order", {
 });
 
 });
-

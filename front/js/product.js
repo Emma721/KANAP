@@ -125,5 +125,3 @@ console.log(produitEnregistreLS);
 
 
 }
-
-
