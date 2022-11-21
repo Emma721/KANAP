@@ -6,7 +6,7 @@ let cardCart = document.querySelector ('#cart__items');
 
 
 
-if(produitEnregistreLS === null){
+if(produitEnregistreLS === null ){
     console.log("je suis vide");
 }else {
     
@@ -100,7 +100,7 @@ for ( let c = 0; c < produitEnregistreLS.length; c++){
     
 
 
-}
+} 
 
 //calcul quantité
 
@@ -137,6 +137,10 @@ totalQuantityText.textContent = getNumberProduct ();
 
 // SUPPRIMER PRODUIT 
 
+
+
+//supprimer produit draft
+
 //selection du "bouton" supprimer 
 let btnSupprimer = document.querySelectorAll (".deleteItem");
 console.log (btnSupprimer);
@@ -146,40 +150,95 @@ for (let l= 0 ; l < btnSupprimer.length; l++){
     btnSupprimer[l].addEventListener ("click", (event) =>{
         event.preventDefault();
 
+        console.log ("btnSupprimer");
+        console.log (btnSupprimer);
 //selection du produit id en particulier 
         let idProduitASupprimer = produitEnregistreLS[l]._id;
+        let colorProduitASupprimer = produitEnregistreLS[l].color;
         console.log("idProduitASupprimer");
         console.log(idProduitASupprimer);
+        console.log("colorProduitASupprimer");
+        console.log(colorProduitASupprimer); 
 
 
         // supprimer un objet qui est dans un tableau avec la méthode filter : 
             // filter va créer un nouveau tableau avec les produits differents a celui avec l'idProduitASupprimer 
         
         produitEnregistreLS = produitEnregistreLS.filter( element => element.id !== idProduitASupprimer);
+        produitEnregistreLS = produitEnregistreLS.filter( element => element.color !== colorProduitASupprimer);
+        console.log(produitEnregistreLS);
         console.log(produitEnregistreLS);
 
 
-        //on envoie le nouveau tableau dns LS 
-        localStorage.setItem("produit", JSON.stringify (produitEnregistreLS)
-        );
-
+        localStorage.setItem("product", JSON.stringify (produitEnregistreLS));
+        //on envoie la variable dns LS 
+        //if (produitEnregistreLS.id == idProduitASupprimer.id && produitEnregistreLS.color == colorProduitASupprimer){
+            
+        //}
         //recharger la page une fois le produit supprimé
         window.location.href = "cart.html" ; 
 
     });
+
 }
+
 
 
 
 //PAS DE PRODUIT EN DOUBLE 
 
 
+function dontDouble (produitEnregistreLS) {
+
+//pas besoin de recuperer produitEnregistreLS car déjà fait tout en haut de la page
+//recherche d'un produit deja enregistre dans LS ( grâce au même id)
+let article = document.querySelector ('cart__items');
+let articleId = produitEnregistreLS.getAttribute('data-id');
+let articleColor = produitEnregistreLS.getAttribute('data-color');
+
+//parcourir tous les articles dans le panier 
+for ( u= 0; u <produitEnregistreLS.length ; u++ ) {
+//trouver si / celui qui a le meme id et couleur qu'un produit deja enregistre dans le LS 
+produitEnregistreLS.find (p => article == produitEnregistreLS)
+if (productDouble != undefined) {
+    productDouble.quantity ++;
+} else {
+    produitEnregistreLS.quantity = 1;
+    product.push (produitEnregistreLS);
+}
+        //save basket?? 
+
+}
+
+} 
 
 
+//selectionner le btn ajouter au panier
+//add event listener on click
+// verification de condition ( si id && coleur sont egales a id && couleur d'un produit dns le ls)
+    // recuperer dns une variable la quantité du produit qui a les meme id et couleur 
+            //ajouter la qnt a la qnt l'objet du LS qui a le meme id et meme couleur
 
+         
+
+            //plus simple? : 
+                // on laisse le produit s'ajouter, 
+                // on parcours le LS
+                //met condition : si id et couleur d'un element LS = a celui d'un autre element enregistre dns LS 
+                //alors prends qnt element 1, 
+                //ajoute cela a qnt element 2
+                // efface element 1 en overriding the objet 
 //CHANGEMENT DE QUANTITE
 
+function changeQuantity () {
 
+    //Selectionner l'input 
+    //add event listener du changement de l'input 
+    //add condition ( si le input change, alors ecraser la valeur de la variable avec le nouveau input)
+
+}
+
+*/
 //--------------------------------formulaire-------------------------------------------------------------//
 
 
@@ -250,7 +309,7 @@ if (/^[A-Za-z]{3,20}$/.test(laVille)){
     return false;
 }
 };
-
+/*
 //EMAIL
 function emailVerif(){
     let lemail = contactLocation.email;
@@ -261,7 +320,7 @@ function emailVerif(){
         //alert(textAlert ("Email"));
         return false;
     }
-    };
+    }; */
 
 //ADRESSE
 function adresseVerif(){
@@ -280,8 +339,8 @@ function adresseVerif(){
 
 //pour envoyer l'objet ( le formulaire rempli) dans le LS
 //creer une key pour le LS, et mettre toutes les valeurs recupérés du formulaire qui a été rempli. 
-if(prenomVerif() && nomVerif() && villeVerif() && adresseVerif() && emailVerif()){
-    localStorage.setItem("formulaireDataKey", JSON.stringify(contactLocation));
+if(prenomVerif() && nomVerif() && villeVerif() && adresseVerif() /*&& emailVerif()*/){
+    localStorage.setItem("formulaire", JSON.stringify(contactLocation));
 }else {
     //message erreur 
     //alert("Veuillez bien remplir le formulaire");
@@ -310,6 +369,23 @@ produitAchete.push(produitEnregistreLS);
 //objet pour sauvegarder les données du formulaire
 // et le tableau avec les infos du produit enregistré 
 //pour que la commande puisse être enregistré dns LS comme un seul objet
+
+
+/**
+ *
+ * Expects request to contain:
+ * contact: {
+ *   firstName: string,
+ *   lastName: string,
+ *   address: string,
+ *   city: string,
+ *   email: string
+ * }
+ * products: [string] <-- array of product _id
+ *
+ */
+
+
 const order = {
     contact: {   
       firstName: inputPrenom.value,
@@ -323,19 +399,24 @@ const order = {
     produits : produitAchete,
 };
 
+// faut valider avant d'envoyer vers le serveur 
 
 //envoi de l'objet vers le serveur 
 /*let promise01 =*/ 
-fetch ("http://localhost:3000/api/products/order", {
+fetch (": http://localhost:3000/api/products", {
     method : "POST",
+    body : JSON.stringify(order),
     headers: { 
         'Accept' : "application/json",
-        "Content-Type" : "application/json"
+        "Content-Type" : "application/json",
     },
-    body : JSON.stringify(order)
-
-}).then((response)=> {
-    return response.json();
+    
+    
+});
+  
+/*.then(async(response)=> {
+     const postOrder = await response.json();
+     let orderId = postOrder.orderId
 })
 .then((data)=> {
     console.log(data);  
@@ -343,5 +424,5 @@ fetch ("http://localhost:3000/api/products/order", {
 .catch((error)=> {
     console.log(error);
 });
-
+*/
 });
