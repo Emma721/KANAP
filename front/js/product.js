@@ -68,58 +68,61 @@ function afficheProduit (listProduct) {
 
 
 
-//function addToCart (){ 
 
 let addToCartBtn= document.querySelector("#addToCart")
 addToCartBtn.addEventListener("click", () => {
-  if (quantity.value > 0 && quantity.value < 100) {
+  if (quantity.value > 0 && quantity.value < 100 && colorOption.value != "") {
  //récuperation des options choisies par le client sous la forme d'un objet
 
- let itemTitle= document.querySelector("#title");
- let itemPrice= document.querySelector("#price");
- //let itemDescription= document.querySelector("#description");
- let colorOption = document.querySelector("#colors");
+
  //let itemImage = document.querySelectorAll("img");
 
+ let produitEnregistreLS = JSON.parse(localStorage.getItem("product"));
+  if (produitEnregistreLS === null) {
+    produitEnregistreLS = [];
+  }
 
-
-let productAdded = {
-  name: itemTitle.textContent, 
+let productAdded = { 
   _id: id,
   quantity: quantity.value,
   color: colorOption.value, 
-  price: itemPrice.innerHTML,
-  image :  itemImage.src,
 
- 
  }
 
+let trouve = 0 
+for (z =0; z <produitEnregistreLS.length; z++){
+  if( produitEnregistreLS[z]._id == productAdded._id &&  produitEnregistreLS[z].color == productAdded.color  ){
+      const newTotalQuantity = Number (produitEnregistreLS[z].quantity) + Number (productAdded.quantity) ; 
+      trouve = 1
+      if( newTotalQuantity > 100) {
+        alert ("quantité limite depassée, ajout pas possible");
+      } else {
+        produitEnregistreLS[z].quantity = newTotalQuantity ; 
+        localStorage.setItem("product", JSON.stringify(produitEnregistreLS));
+      }
+  
 
+  }
+
+}
+
+if (trouve == 0) {
+  produitEnregistreLS.push(productAdded);
+  localStorage.setItem("product", JSON.stringify(produitEnregistreLS));
+}
  //--------------Local Storage------------/
 // -------stocker la récupération des valeurs du formulaire dans le local storage ------//
 
-  let produitEnregistreLS = JSON.parse(localStorage.getItem("product"));
+
   console.log(produitEnregistreLS);
 
 
 //s'il y a des produits déjà enregistrés dans LS
-if(produitEnregistreLS){
-  produitEnregistreLS.push(productAdded);
-  localStorage.setItem("product", JSON.stringify(produitEnregistreLS));
-  console.log(produitEnregistreLS);
+
+
+}else {
+  alert("quantité et/ou coleur incorrecte");
   
-}
-//s'il n'y pas de produits déjà enregistrés en LS
-else  {
-  // ajouter le code pour faire que si le produit a ajouter n'a pas déja était ajouté alors on execute ce qu'il y a dans else : 
-produitEnregistreLS = [];
-produitEnregistreLS.push(productAdded);
-//creation de la clef
-localStorage.setItem("product", JSON.stringify(produitEnregistreLS));
-
-console.log(produitEnregistreLS);
-}
-
 }
 });
 

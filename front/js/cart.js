@@ -183,51 +183,6 @@ for (let l= 0 ; l < btnSupprimer.length; l++){
 }
 
 
-
-
-//PAS DE PRODUIT EN DOUBLE 
-
-
-function dontDouble (produitEnregistreLS) {
-
-//pas besoin de recuperer produitEnregistreLS car déjà fait tout en haut de la page
-//recherche d'un produit deja enregistre dans LS ( grâce au même id)
-let article = document.querySelector ('cart__items');
-let articleId = produitEnregistreLS.getAttribute('data-id');
-let articleColor = produitEnregistreLS.getAttribute('data-color');
-
-//parcourir tous les articles dans le panier 
-for ( u= 0; u <produitEnregistreLS.length ; u++ ) {
-//trouver si / celui qui a le meme id et couleur qu'un produit deja enregistre dans le LS 
-produitEnregistreLS.find (p => article == produitEnregistreLS)
-if (productDouble != undefined) {
-    productDouble.quantity ++;
-} else {
-    produitEnregistreLS.quantity = 1;
-    product.push (produitEnregistreLS);
-}
-        //save basket?? 
-
-}
-
-} 
-
-
-//selectionner le btn ajouter au panier
-//add event listener on click
-// verification de condition ( si id && coleur sont egales a id && couleur d'un produit dns le ls)
-    // recuperer dns une variable la quantité du produit qui a les meme id et couleur 
-            //ajouter la qnt a la qnt l'objet du LS qui a le meme id et meme couleur
-
-         
-
-            //plus simple? : 
-                // on laisse le produit s'ajouter, 
-                // on parcours le LS
-                //met condition : si id et couleur d'un element LS = a celui d'un autre element enregistre dns LS 
-                //alors prends qnt element 1, 
-                //ajoute cela a qnt element 2
-                // efface element 1 en overriding the objet 
 //CHANGEMENT DE QUANTITE
 
 function changeQuantity () {
@@ -238,7 +193,7 @@ function changeQuantity () {
 
 }
 
-*/
+
 //--------------------------------formulaire-------------------------------------------------------------//
 
 
@@ -398,11 +353,11 @@ const order = {
 
     produits : produitAchete,
 };
-
+/*
 // faut valider avant d'envoyer vers le serveur 
 
 //envoi de l'objet vers le serveur 
-/*let promise01 =*/ 
+/*let promise01 =
 fetch (": http://localhost:3000/api/products", {
     method : "POST",
     body : JSON.stringify(order),
