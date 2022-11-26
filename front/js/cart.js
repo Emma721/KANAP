@@ -335,13 +335,20 @@ if(prenomVerif() && nomVerif() && villeVerif() && adresseVerif() && emailVerif()
 
 //declaration des données obtenues dans le formulaire
 console.log("produitEnregistreLS");
-console.log(produitEnregistreLS);
+
+
 //console.log("productAdded._id");
 //console.log(produitEnregistreLS[b]._id);
 
-let produitAcheteId = [];
-console.log(produitEnregistreLS);
-produitAcheteId.push(produitEnregistreLS);
+let products = [];
+
+for (i = 0 ; i < produitEnregistreLS.lenght ; i ++){
+    products.push(produitEnregistreLS._id);
+}
+
+
+console.log( "products");
+console.log( products);
 
 //maybe they are not send like strings
 const order = {
@@ -352,7 +359,7 @@ const order = {
         city: document.querySelector("#city").value,
         email :document.querySelector("#email").value,
 },
-    products : produitAcheteId,
+    products : products,
 }
 //let   inputOrder= document.querySelector("#order").value;
 //tableau pour sauvegarder l'ID' du produit(s) choisis par le client
