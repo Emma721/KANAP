@@ -54,15 +54,19 @@ if(produitEnregistreLS === null ){
       let contentDescription = document.createElement ("div");
         contentDescription.classList.add ("cart__item__content__description");
         contentContainer.appendChild(contentDescription);
-            let cartH2 = document.createElement ("h2");
-            cartH2.textContent =  listProducts[b] .name;
-            contentDescription.appendChild(cartH2);
-            let cartColor = document.createElement ("p");
-            cartColor.textContent = produitEnregistreLS[b].color ;
-            contentDescription.appendChild(cartColor);
-            let cartPrice = document.createElement ("p");
-            cartPrice.textContent = listProducts[b].price;
-            contentDescription.appendChild(cartPrice); 
+        
+                let cartH2 = document.createElement ("h2");
+                cartH2.textContent =  listProducts[b] .name;
+                contentDescription.appendChild(cartH2);
+
+                let cartColor = document.createElement ("p");
+                cartColor.textContent = produitEnregistreLS[b].color ;
+                contentDescription.appendChild(cartColor);
+
+                let cartPrice = document.createElement ("p");
+                cartPrice.textContent = listProducts[b].price;
+                contentDescription.appendChild(cartPrice); 
+
             let contentSettings = document.createElement ("div");
             contentSettings.classList.add ("cart__item__content__settings");
             contentContainer.appendChild(contentSettings);
@@ -71,7 +75,6 @@ if(produitEnregistreLS === null ){
                 contentSettings.appendChild( cartQuantity);
                     let cartAfficheQuantite = document.createElement ("p");
                     cartAfficheQuantite.textContent = 'Qté : ' ;
-                    //ou `Qté :  ${produitEnregistreLS[b] .quantity}`
                     cartQuantity.appendChild(cartAfficheQuantite);
                     
                     let inputQuantite = document.createElement('input');
@@ -335,6 +338,7 @@ if(prenomVerif() && nomVerif() && villeVerif() && adresseVerif() && emailVerif()
 
 //declaration des données obtenues dans le formulaire
 console.log("produitEnregistreLS");
+console.log(produitEnregistreLS.id);
 
 
 //console.log("productAdded._id");
