@@ -17,7 +17,7 @@ fetch("http://localhost:3000/api/products/" + id)
   
   })
   .catch((err)=> console.log(err));
-
+ 
 
 function afficheProduit (listProduct) {
 
@@ -29,20 +29,13 @@ function afficheProduit (listProduct) {
   let colorOption = document.querySelector("#colors");
   let imageMotherPlace = document.querySelector(".item__img");
 
-  console.log("imageMotherPlace");
-  console.log(imageMotherPlace);
  
   //creating the img element 
   let itemImage = document.createElement('img');
   itemImage.src = listProduct.imageUrl ;
   itemImage.alt = listProduct.altTxt ;
   imageMotherPlace.appendChild(itemImage);
-
-  console.log("itemImage");
-  console.log(itemImage);
-
-  console.log("listProduct.imageUrl");
-  console.log(listProduct.imageUrl);
+à
 
   //inserting the other elements
   itemTitle.textContent = listProduct.name;
@@ -72,10 +65,7 @@ function afficheProduit (listProduct) {
 let addToCartBtn= document.querySelector("#addToCart")
 addToCartBtn.addEventListener("click", () => {
   if (quantity.value > 0 && quantity.value < 100 && colorOption.value != "") {
- //récuperation des options choisies par le client sous la forme d'un objet
 
-
- //let itemImage = document.querySelectorAll("img");
 
  let produitEnregistreLS = JSON.parse(localStorage.getItem("product"));
   if (produitEnregistreLS === null) {

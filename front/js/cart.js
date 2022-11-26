@@ -1,77 +1,85 @@
 //--------------------------------affichage card panier-------------------------------------------------------------//
-
 let produitEnregistreLS = JSON.parse(localStorage.getItem("product"));
 let cardCart = document.querySelector ('#cart__items');
 
+fetch("http://localhost:3000/api/products")
+   .then(function (res) {
+    if (res.ok) {
+    return res.json();  
+ 
+  }})
+  .then((res) => {
+    console.log(res);
+    listProducts = res;
+    afficheProduits(listProducts); 
+    
+  })
+  .catch((err)=> console.log(err));
 
 
+
+function afficheProduits (listProducts) {
+  // tu crées + enregistres le lien entre l'endroit dans ton doc html en déclarant cette variable
+  items = document.querySelector("#items"); 
+
+ 
+  //let link;
+ // for (let i=0; i <listProducts.length ; i ++) 
 
 if(produitEnregistreLS === null ){
     console.log("je suis vide");
 }else {
-    
-    //let structureProduitPanier = [];
 
-    for(b = 0; b < produitEnregistreLS.length; b++){
+     //let structureProduitPanier = [];
+     for(b = 0; b < produitEnregistreLS.length; b++){
      
+        let articleCard = document.createElement('article');
+        articleCard.classList.add ("cart__item");
+        articleCard.id = produitEnregistreLS[b]._id; 
+        articleCard.color=produitEnregistreLS[b].color; 
+        cart__items.appendChild (articleCard);
+        let imageContainer = document.createElement ('div');
+        imageContainer.classList.add ("cart__item__img");
+        articleCard.appendChild (imageContainer);
+        
+           let imageCart = document.createElement ('img');
+            imageCart.src= listProducts[b].imageUrl;
+            imageCart.alt= listProducts[b].textAlt;
+            imageContainer.appendChild (imageCart); 
 
-    let articleCard = document.createElement('article');
-    articleCard.classList.add ("cart__item");
-    articleCard.id = produitEnregistreLS[b]._id; 
-    articleCard.color=produitEnregistreLS[b].color; 
-    cart__items.appendChild (articleCard);
-
-    let imageContainer = document.createElement ('div');
-    imageContainer.classList.add ("cart__item__img");
-    articleCard.appendChild (imageContainer);
-    
-
-       let imageCart = document.createElement ('img');
-        imageCart.src= produitEnregistreLS[b].image;
-        imageCart.alt= produitEnregistreLS[b].image;
-        imageContainer.appendChild (imageCart); 
-
-
+            
     let contentContainer = document.createElement ("div");
     contentContainer.classList.add ("cart__item__content");
     articleCard.appendChild(contentContainer);
-
       let contentDescription = document.createElement ("div");
         contentDescription.classList.add ("cart__item__content__description");
         contentContainer.appendChild(contentDescription);
-
             let cartH2 = document.createElement ("h2");
-            cartH2.textContent =  produitEnregistreLS[b] .name;
+            cartH2.textContent =  listProducts[b] .name;
             contentDescription.appendChild(cartH2);
-
             let cartColor = document.createElement ("p");
             cartColor.textContent = produitEnregistreLS[b].color ;
             contentDescription.appendChild(cartColor);
-
             let cartPrice = document.createElement ("p");
-            cartPrice.textContent =  produitEnregistreLS[b].price;
+            cartPrice.textContent = listProducts[b].price;
             contentDescription.appendChild(cartPrice); 
-
-    let contentSettings = document.createElement ("div");
-    contentSettings.classList.add ("cart__item__content__settings");
-    contentContainer.appendChild(contentSettings);
-
-       let cartQuantity = document.createElement ("div");
-        cartQuantity.classList.add ("cart__item__content__settings_quantity");
-        contentSettings.appendChild( cartQuantity);
-
-            let cartAfficheQuantite = document.createElement ("p");
-            cartAfficheQuantite.textContent = 'Qté : ' ;
-            //ou `Qté :  ${produitEnregistreLS[b] .quantity}`
-            cartQuantity.appendChild(cartAfficheQuantite);
-            
-            let inputQuantite = document.createElement('input');
-            inputQuantite.type = "number";
-            inputQuantite.classList.add('itemQuantity');
-            inputQuantite.name = 'itemQuantity';
-            inputQuantite.value = produitEnregistreLS[b] .quantity;
-            cartQuantity.appendChild(inputQuantite);
-
+            let contentSettings = document.createElement ("div");
+            contentSettings.classList.add ("cart__item__content__settings");
+            contentContainer.appendChild(contentSettings);
+               let cartQuantity = document.createElement ("div");
+                cartQuantity.classList.add ("cart__item__content__settings_quantity");
+                contentSettings.appendChild( cartQuantity);
+                    let cartAfficheQuantite = document.createElement ("p");
+                    cartAfficheQuantite.textContent = 'Qté : ' ;
+                    //ou `Qté :  ${produitEnregistreLS[b] .quantity}`
+                    cartQuantity.appendChild(cartAfficheQuantite);
+                    
+                    let inputQuantite = document.createElement('input');
+                    inputQuantite.type = "number";
+                    inputQuantite.classList.add('itemQuantity');
+                    inputQuantite.name = 'itemQuantity';
+                    inputQuantite.value = produitEnregistreLS[b] .quantity;
+                    cartQuantity.appendChild(inputQuantite);
         let cartDelete= document.createElement ("div");
         cartDelete.classList.add ("cart__item__content__settings_delete");
         contentSettings.appendChild( cartDelete);
@@ -81,16 +89,19 @@ if(produitEnregistreLS === null ){
             deleteItem.textContent = "Suprimer";
             cartDelete.appendChild(deleteItem);
     }
-
     
 }
+}
+
 
 //--------------------------------calcul total du prix et de la quantité -------------------------------------------------------------//
 
 let totalPriceCalcul = [] ;
-          
+//let productAPI = listProducts[b].price
+
 //Aller chercher tous les prix qu'il y a dans le panier
 for ( let c = 0; c < produitEnregistreLS.length; c++){ 
+    //a changer par le nom donné au prix du produit x, recupéré auprès de l'api.
     let totalPriceInsideCart =  produitEnregistreLS[c].price;
     console.log(totalPriceInsideCart);
 
@@ -103,6 +114,8 @@ for ( let c = 0; c < produitEnregistreLS.length; c++){
 } 
 
 //calcul quantité
+
+
 
 function getNumberProduct () {
     //let basket = get basket(); 
@@ -132,6 +145,12 @@ function getTotalPrice (){
 let totalQuantityText = document.querySelector ('#totalQuantity');
 totalQuantityText.textContent = getNumberProduct ();
 
+//--------------------------------affichage du panier -------------------------------------------------------------//
+
+
+//function de l'ordre : ils doivent être regroupés par "modèle et par couleur "
+
+
 
 //--------------------------------modification du panier -------------------------------------------------------------//
 
@@ -150,15 +169,10 @@ for (let l= 0 ; l < btnSupprimer.length; l++){
     btnSupprimer[l].addEventListener ("click", (event) =>{
         event.preventDefault();
 
-        console.log ("btnSupprimer");
-        console.log (btnSupprimer);
+       
 //selection du produit id en particulier 
         let idProduitASupprimer = produitEnregistreLS[l]._id;
         let colorProduitASupprimer = produitEnregistreLS[l].color;
-        console.log("idProduitASupprimer");
-        console.log(idProduitASupprimer);
-        console.log("colorProduitASupprimer");
-        console.log(colorProduitASupprimer); 
 
 
         // supprimer un objet qui est dans un tableau avec la méthode filter : 
@@ -166,15 +180,13 @@ for (let l= 0 ; l < btnSupprimer.length; l++){
         
         produitEnregistreLS = produitEnregistreLS.filter( element => element.id !== idProduitASupprimer);
         produitEnregistreLS = produitEnregistreLS.filter( element => element.color !== colorProduitASupprimer);
-        console.log(produitEnregistreLS);
-        console.log(produitEnregistreLS);
-
+       
 
         localStorage.setItem("product", JSON.stringify (produitEnregistreLS));
         //on envoie la variable dns LS 
         //if (produitEnregistreLS.id == idProduitASupprimer.id && produitEnregistreLS.color == colorProduitASupprimer){
             
-        //}
+        
         //recharger la page une fois le produit supprimé
         window.location.href = "cart.html" ; 
 
@@ -183,7 +195,7 @@ for (let l= 0 ; l < btnSupprimer.length; l++){
 }
 
 
-//CHANGEMENT DE QUANTITE
+//CHANGEMENT DE QUANTITE - fisrt draft
 
 function changeQuantity () {
 
@@ -191,6 +203,22 @@ function changeQuantity () {
     //add event listener du changement de l'input 
     //add condition ( si le input change, alors ecraser la valeur de la variable avec le nouveau input)
 
+    //no need to select the input because you did it when creating it dynamically
+    for (z=0 ; z < inputQuantite[b].value ; z ++) {
+        inputQuantite[b].addEventListener ('change', (event) => {
+
+            if (inputQuantite[b].value != productEnregistreLS [b].quantity) {
+                productEnregistreLS[b].quantity = inputQuantite.quantity
+                localStorage.setItem("product", JSON.stringify(produitEnregistreLS));
+                
+                getTotalPrice ();
+            }else {
+                produitEnregistreLS.push(productAdded);
+            }
+
+    })
+
+}
 }
 
 
@@ -264,7 +292,7 @@ if (/^[A-Za-z]{3,20}$/.test(laVille)){
     return false;
 }
 };
-/*
+
 //EMAIL
 function emailVerif(){
     let lemail = contactLocation.email;
@@ -275,7 +303,7 @@ function emailVerif(){
         //alert(textAlert ("Email"));
         return false;
     }
-    }; */
+    }; 
 
 //ADRESSE
 function adresseVerif(){
@@ -294,7 +322,7 @@ function adresseVerif(){
 
 //pour envoyer l'objet ( le formulaire rempli) dans le LS
 //creer une key pour le LS, et mettre toutes les valeurs recupérés du formulaire qui a été rempli. 
-if(prenomVerif() && nomVerif() && villeVerif() && adresseVerif() /*&& emailVerif()*/){
+if(prenomVerif() && nomVerif() && villeVerif() && adresseVerif() && emailVerif()){
     localStorage.setItem("formulaire", JSON.stringify(contactLocation));
 }else {
     //message erreur 
@@ -306,19 +334,28 @@ if(prenomVerif() && nomVerif() && villeVerif() && adresseVerif() /*&& emailVerif
 
 
 //declaration des données obtenues dans le formulaire
-let inputPrenom =document.querySelector("#firstName").value;
-let inputNom=document.querySelector("#lastName").value;
-let inputAddress=document.querySelector("#address").value;
-let inputCity= document.querySelector("#city").value;
-let inputEmail=document.querySelector("#email").value;
+console.log("produitEnregistreLS");
+console.log(produitEnregistreLS);
+//console.log("productAdded._id");
+//console.log(produitEnregistreLS[b]._id);
+
+let produitAcheteId = [];
+console.log(produitEnregistreLS);
+produitAcheteId.push(produitEnregistreLS);
+
+//maybe they are not send like strings
+const order = {
+    contact: {
+        firstName : document.querySelector("#firstName").value,
+        lastName : document.querySelector("#lastName").value,
+        address :document.querySelector("#address").value,
+        city: document.querySelector("#city").value,
+        email :document.querySelector("#email").value,
+},
+    products : produitAcheteId,
+}
 //let   inputOrder= document.querySelector("#order").value;
-
-// THERE4S SOMETHJING GOING ON WITH SELECTINOF THEH ID OF THE PRODCUT thzt doesn't make the resquest post work??? 
-
-//tableau pour sauvegarder les données du produit(s) choisis par le client
-let produitAchete = [];
-produitAchete.push(produitEnregistreLS);
-
+//tableau pour sauvegarder l'ID' du produit(s) choisis par le client
 
 //--------------------------------creation de l'objet à envoyer contenant le panier et le formulaire  ---------------------------//
 //objet pour sauvegarder les données du formulaire
@@ -341,43 +378,41 @@ produitAchete.push(produitEnregistreLS);
  */
 
 
-const order = {
-    contact: {   
-      firstName: inputPrenom.value,
-      lastName: inputNom.value,
-      city: inputCity.value,
-      address: inputAddress.value,
-      email: inputEmail.value,
-
-},
-
-    produits : produitAchete,
-};
-/*
-// faut valider avant d'envoyer vers le serveur 
-
-//envoi de l'objet vers le serveur 
-/*let promise01 =
-fetch (": http://localhost:3000/api/products", {
-    method : "POST",
-    body : JSON.stringify(order),
-    headers: { 
-        'Accept' : "application/json",
-        "Content-Type" : "application/json",
-    },
-    
-    
-});
+ localStorage.setItem("order", order);
+ console.log(order);
+ 
+ // faut valider avant d'envoyer vers le serveur 
+ 
+ 
+ console.log(order);
+ 
+ //envoi de l'objet vers le serveur 
+ /*let promise01 =*/ 
   
-/*.then(async(response)=> {
-     const postOrder = await response.json();
-     let orderId = postOrder.orderId
-})
-.then((data)=> {
-    console.log(data);  
-})
-.catch((error)=> {
-    console.log(error);
-});
-*/
-});
+ const promise01 = fetch ("http://localhost:3000/api/products/order", {
+     method : "POST",
+     headers: { 
+         Accept : "application/kson",
+         "Content-Type" : "application/json",
+     },
+     body : JSON.stringify(order)
+ 
+ });
+     //pour voir le resultat du serveur dans al console
+     promise01.then(async(response)=> {
+ 
+         try{
+             console.log("response");
+             console.log(response);
+             const contenu = await response.json();
+             console.log ("contenu");
+             console.log(contenu);
+ 
+         }catch(e){
+             console.log(e);
+         }
+     })
+ 
+ }); 
+  
+ //clear ls
