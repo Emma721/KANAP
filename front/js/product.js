@@ -59,10 +59,11 @@ addToCartBtn.addEventListener("click", () => {
  let colorOption = document.querySelector("#colors");
  //let itemImage = document.querySelectorAll("img");
 let productAdded = {
-  name: itemTitle.textContent, 
+
   _id: id,
   quantity: quantity.value,
   color: colorOption.value, 
+  
 
  
  }

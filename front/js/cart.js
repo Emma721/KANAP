@@ -32,6 +32,17 @@ if(produitEnregistreLS === null ){
 
      //let structureProduitPanier = [];
      for(b = 0; b < produitEnregistreLS.length; b++){
+
+        //get id's from LS
+        //localStorage.getElementById("_id");
+        //store in a variable
+        //let listOfId = produitEnregistreLS[b]._id;
+
+        //for ( y = 0; y < listProducts.legth ; y++){
+                //if (produitEnregistreLS[b]._id  == listProducts[b]._id ){
+
+            //get the index of the object of the array that has the same id 
+            // substitute the [b] in the affichage below with an abstract n position
      
         let articleCard = document.createElement('article');
         articleCard.classList.add ("cart__item");
@@ -92,10 +103,10 @@ if(produitEnregistreLS === null ){
             deleteItem.textContent = "Suprimer";
             cartDelete.appendChild(deleteItem);
     }
-    
 }
 }
-
+//}
+//}
 
 //--------------------------------calcul total du prix et de la quantité -------------------------------------------------------------//
 
@@ -199,6 +210,7 @@ for (let l= 0 ; l < btnSupprimer.length; l++){
 
 
 //CHANGEMENT DE QUANTITE - fisrt draft
+/*
 
 function changeQuantity () {
 
@@ -223,7 +235,7 @@ function changeQuantity () {
 
 }
 }
-
+*/
 
 //--------------------------------formulaire-------------------------------------------------------------//
 
@@ -337,9 +349,6 @@ if(prenomVerif() && nomVerif() && villeVerif() && adresseVerif() && emailVerif()
 
 
 //declaration des données obtenues dans le formulaire
-console.log("produitEnregistreLS");
-console.log(produitEnregistreLS.id);
-
 
 //console.log("productAdded._id");
 //console.log(produitEnregistreLS[b]._id);
@@ -395,7 +404,7 @@ const order = {
  // faut valider avant d'envoyer vers le serveur 
  
  
- console.log(order);
+ //console.log(order);
  
  //envoi de l'objet vers le serveur 
  /*let promise01 =*/ 
@@ -403,7 +412,7 @@ const order = {
  const promise01 = fetch ("http://localhost:3000/api/products/order", {
      method : "POST",
      headers: { 
-         Accept : "application/kson",
+         Accept : "application/json",
          "Content-Type" : "application/json",
      },
      body : JSON.stringify(order)
@@ -411,19 +420,24 @@ const order = {
  });
      //pour voir le resultat du serveur dans al console
      promise01.then(async(response)=> {
- 
-         try{
-             console.log("response");
-             console.log(response);
-             const contenu = await response.json();
-             console.log ("contenu");
-             console.log(contenu);
- 
-         }catch(e){
-             console.log(e);
-         }
-     })
+    try{
+            //récuperation de l'id de la reponse du serveur 
+        const contenu = await response.json();
+        let orderId = contenu.orderId;
+
+        
+        //mettre lid dans le local storage
+        localStorage.setItem("orderId", orderId);
+
+        //clear le local storage et changer de page
+        //localStorage.clear();
+        //window.location.assign("confirmation.html?id=" + contenu.orderId);
+        window.location.href = "confirmation.html";
+
+    } catch (e){
+        console.log(e);
+    }
+
  
  }); 
-  
- //clear ls
+}); 
