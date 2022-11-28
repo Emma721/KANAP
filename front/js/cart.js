@@ -1,8 +1,14 @@
 //--------------------------------affichage card panier-------------------------------------------------------------//
-let produitEnregistreLS = JSON.parse(localStorage.getItem("product"));
+var produitEnregistreLS = JSON.parse(localStorage.getItem("product"));
+console.log(produitEnregistreLS);
 let cardCart = document.querySelector ('#cart__items');
 
-fetch("http://localhost:3000/api/products")
+for ( k = 0 ; k < produitEnregistreLS.length ; k++){
+    id = produitEnregistreLS[k]._id;
+    canap = produitEnregistreLS[k];
+    console.log("canap");
+    console.log(canap);
+    fetch("http://localhost:3000/api/products/" + id )
    .then(function (res) {
     if (res.ok) {
     return res.json();  
@@ -10,52 +16,58 @@ fetch("http://localhost:3000/api/products")
   }})
   .then((res) => {
     console.log(res);
-    listProducts = res;
-    afficheProduits(listProducts); 
+    listProduct = res;
+
+    afficheProduits(listProduct, canap); 
+
+   
     
   })
   .catch((err)=> console.log(err));
 
+}
 
 
-function afficheProduits (listProducts) {
-  // tu crées + enregistres le lien entre l'endroit dans ton doc html en déclarant cette variable
-  items = document.querySelector("#items"); 
+function afficheProduits (listProduct, canapS) {
+    console.log("canapS");
+    console.log(canapS);
+    //const givenId = produitEnregistreLS[b]._id
+   
 
- 
-  //let link;
- // for (let i=0; i <listProducts.length ; i ++) 
-
-if(produitEnregistreLS === null ){
-    console.log("je suis vide");
-}else {
-
-     //let structureProduitPanier = [];
-     for(b = 0; b < produitEnregistreLS.length; b++){
-
-        //get id's from LS
-        //localStorage.getElementById("_id");
-        //store in a variable
-        //let listOfId = produitEnregistreLS[b]._id;
-
-        //for ( y = 0; y < listProducts.legth ; y++){
-                //if (produitEnregistreLS[b]._id  == listProducts[b]._id ){
-
-            //get the index of the object of the array that has the same id 
-            // substitute the [b] in the affichage below with an abstract n position
-     
-        let articleCard = document.createElement('article');
+        //declaration pour afficher et pour obtenir l'id pour chaque produit dans le local storage
+         articleCard = document.createElement('article');
         articleCard.classList.add ("cart__item");
-        articleCard.id = produitEnregistreLS[b]._id; 
-        articleCard.color=produitEnregistreLS[b].color; 
+        articleCard.id = canapS._id; 
+        articleCard.color  = canapS.color; 
         cart__items.appendChild (articleCard);
+
+        /*
+        console.log(articleCard.id)
+        //enregistrement de l'id produit LS dans une variable
+        givenId = (articleCard.id)
+        console.log("givenId")
+        console.log(givenId)
+       
+            
+
+        //put the name of the variable that stocks the id 
+
+   //parcourir id de api (for of) 
+   //if the id of api == givenId 
+   //retrieve et affiche name and price of that instance in the api 
+     if ( listProduct[b]._id == givenId){
+        //Array.prototype.index( )
+        console.log(listProducts.indexOf(givenId))*/
+        
+     
         let imageContainer = document.createElement ('div');
         imageContainer.classList.add ("cart__item__img");
         articleCard.appendChild (imageContainer);
+
         
            let imageCart = document.createElement ('img');
-            imageCart.src= listProducts[b].imageUrl;
-            imageCart.alt= listProducts[b].textAlt;
+            imageCart.src= listProduct.imageUrl;
+            imageCart.alt= listProduct.textAlt;
             imageContainer.appendChild (imageCart); 
 
             
@@ -67,15 +79,15 @@ if(produitEnregistreLS === null ){
         contentContainer.appendChild(contentDescription);
         
                 let cartH2 = document.createElement ("h2");
-                cartH2.textContent =  listProducts[b] .name;
+                cartH2.textContent =  listProduct .name;
                 contentDescription.appendChild(cartH2);
 
                 let cartColor = document.createElement ("p");
-                cartColor.textContent = produitEnregistreLS[b].color ;
+                cartColor.textContent = canapS.color ;
                 contentDescription.appendChild(cartColor);
 
                 let cartPrice = document.createElement ("p");
-                cartPrice.textContent = listProducts[b].price;
+                cartPrice.textContent = listProduct.price;
                 contentDescription.appendChild(cartPrice); 
 
             let contentSettings = document.createElement ("div");
@@ -92,8 +104,11 @@ if(produitEnregistreLS === null ){
                     inputQuantite.type = "number";
                     inputQuantite.classList.add('itemQuantity');
                     inputQuantite.name = 'itemQuantity';
-                    inputQuantite.value = produitEnregistreLS[b] .quantity;
+                    //inputQuantite.value = canap.quantity;
+                    inputQuantite.setAttribute("value", canapS.quantity);
+
                     cartQuantity.appendChild(inputQuantite);
+
         let cartDelete= document.createElement ("div");
         cartDelete.classList.add ("cart__item__content__settings_delete");
         contentSettings.appendChild( cartDelete);
@@ -102,14 +117,16 @@ if(produitEnregistreLS === null ){
             deleteItem.classList.add ("deleteItem");
             deleteItem.textContent = "Suprimer";
             cartDelete.appendChild(deleteItem);
-    }
+    
+
+    
+
 }
-}
-//}
-//}
+
+
 
 //--------------------------------calcul total du prix et de la quantité -------------------------------------------------------------//
-
+/*
 let totalPriceCalcul = [] ;
 //let productAPI = listProducts[b].price
 
@@ -117,14 +134,12 @@ let totalPriceCalcul = [] ;
 for ( let c = 0; c < produitEnregistreLS.length; c++){ 
     //a changer par le nom donné au prix du produit x, recupéré auprès de l'api.
     let totalPriceInsideCart =  produitEnregistreLS[c].price;
-    console.log(totalPriceInsideCart);
+   // console.log(totalPriceInsideCart);
 
     //mettre les prix du panier dans le tableau totalPriceCalcul methode .reduce
     totalPriceCalcul.push(totalPriceInsideCart);
-    console.log(totalPriceCalcul);        
+    //console.log(totalPriceCalcul);        
     
-
-
 } 
 
 //calcul quantité
@@ -135,7 +150,7 @@ function getNumberProduct () {
     //let basket = get basket(); 
     let number = 0 ;
     for (let product of produitEnregistreLS){
-        number += product.quantity ++;
+        number += Number (product.quantity) ;
     }
     return number ;
 
@@ -150,7 +165,7 @@ function getTotalPrice (){
     //let basket = get basket(); 
     let total = 0 ;
     for (let product of produitEnregistreLS){
-        total += product.quantity * product.price;
+        total += Number (product.quantity) * Number (product.price);
     }
     return total;
 }
@@ -159,12 +174,27 @@ function getTotalPrice (){
 let totalQuantityText = document.querySelector ('#totalQuantity');
 totalQuantityText.textContent = getNumberProduct ();
 
+
 //--------------------------------affichage du panier -------------------------------------------------------------//
 
 
 //function de l'ordre : ils doivent être regroupés par "modèle et par couleur "
 
+//PUT IN ORDER
 
+
+//array.prototype.sort()
+/*
+function putInOrder () {
+    listProducts.sort(function (a,b)){
+        //compare betwen one item and the one next to it in the API 
+
+
+
+    }
+
+}
+*/
 
 //--------------------------------modification du panier -------------------------------------------------------------//
 
@@ -173,10 +203,10 @@ totalQuantityText.textContent = getNumberProduct ();
 
 
 //supprimer produit draft
-
+/*
 //selection du "bouton" supprimer 
 let btnSupprimer = document.querySelectorAll (".deleteItem");
-console.log (btnSupprimer);
+
 
 //parcurir les btn supprimer 
 for (let l= 0 ; l < btnSupprimer.length; l++){
@@ -207,35 +237,49 @@ for (let l= 0 ; l < btnSupprimer.length; l++){
     });
 
 }
+*/
 
 
 //CHANGEMENT DE QUANTITE - fisrt draft
-/*
 
+/*
 function changeQuantity () {
 
-    //Selectionner l'input 
-    //add event listener du changement de l'input 
-    //add condition ( si le input change, alors ecraser la valeur de la variable avec le nouveau input)
+    //get all the inputs available and add event to for each
+        //let oldQuantity = inputQuantite.value
+        let oldQuantity = document.getElementsByClassName(".itemQuantity").value;
+        let newInput = 0
+        for ( i = 0 ; i < newInput.length ; i ++) {
+         //add event listener du changement de l'input 
+            newInput.addEventListener ('change', (event) => {
+            preventDefault(event);
+            newInput = 1
+            
+            if (newInput != oldQuantity){
+                //ecrase produitEnregistreLS[b].quantity with value of newInput
+                inputQuantite[b].value = newInput
+                //afficher le panier updated
+                afficheProduits();
 
-    //no need to select the input because you did it when creating it dynamically
-    for (z=0 ; z < inputQuantite[b].value ; z ++) {
-        inputQuantite[b].addEventListener ('change', (event) => {
-
-            if (inputQuantite[b].value != productEnregistreLS [b].quantity) {
-                productEnregistreLS[b].quantity = inputQuantite.quantity
+                //calculate updated price 
+                getTotalPrice ();
+                //send to local storage
                 localStorage.setItem("product", JSON.stringify(produitEnregistreLS));
                 
-                getTotalPrice ();
             }else {
-                produitEnregistreLS.push(productAdded);
+                //push to local storage
+                localStorage.setItem("product", JSON.stringify(produitEnregistreLS));
             }
 
-    })
+       
+        });
+    }
+}
 
-}
-}
+
 */
+
+
 
 //--------------------------------formulaire-------------------------------------------------------------//
 
@@ -341,7 +385,7 @@ if(prenomVerif() && nomVerif() && villeVerif() && adresseVerif() && emailVerif()
     localStorage.setItem("formulaire", JSON.stringify(contactLocation));
 }else {
     //message erreur 
-    //alert("Veuillez bien remplir le formulaire");
+    alert("Veuillez bien remplir le formulaire");
 }
 ;
 

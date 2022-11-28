@@ -10,4 +10,6 @@ console.log(afficheOrderId);
 afficheOrderId.innerHTML = orderId;
 
 //clear le local storage pour ne pas garder l'id et permettre de recommencer l'achat
-localStorage.clear();
+//localStorage.clear();
+
+//window.location.href = "index.html"
