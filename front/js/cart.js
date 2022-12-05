@@ -30,15 +30,15 @@ for ( k = 0 ; k < produitEnregistreLS.length ; k++){
 
 function afficheProduits (listProduct, canapS) {
     console.log("canapS");
-    console.log(canapS);
-    //const givenId = produitEnregistreLS[b]._id
+    console.log(canapS); 
+
    
 
         //declaration pour afficher et pour obtenir l'id pour chaque produit dans le local storage
          articleCard = document.createElement('article');
         articleCard.classList.add ("cart__item");
-        articleCard.id = canapS._id; 
-        articleCard.color  = canapS.color; 
+        articleCard.setAttribute('data-id', canapS.id)
+        articleCard.setAttribute ("data-color", canapS.color) //cet element n'apparaît pas dans le html
         cart__items.appendChild (articleCard);
 
         /*
@@ -49,9 +49,7 @@ function afficheProduits (listProduct, canapS) {
         console.log(givenId)
        
             
-
         //put the name of the variable that stocks the id 
-
    //parcourir id de api (for of) 
    //if the id of api == givenId 
    //retrieve et affiche name and price of that instance in the api 
@@ -104,7 +102,7 @@ function afficheProduits (listProduct, canapS) {
                     inputQuantite.type = "number";
                     inputQuantite.classList.add('itemQuantity');
                     inputQuantite.name = 'itemQuantity';
-                    //inputQuantite.value = canap.quantity;
+                    inputQuantite.value = canap.quantity;
                     inputQuantite.setAttribute("value", canapS.quantity);
 
                     cartQuantity.appendChild(inputQuantite);
@@ -122,7 +120,6 @@ function afficheProduits (listProduct, canapS) {
     
 
 }
-
 
 
 //--------------------------------calcul total du prix et de la quantité -------------------------------------------------------------//
@@ -287,7 +284,7 @@ function changeQuantity () {
 
 //selection du btnCommander pour pouvoir actionner l'envoi de données dans le local storage quand on clique dessus
 let btnCommander = document.querySelector (".cart__order__form__submit");
-console.log ( btnCommander);
+//console.log ( btnCommander);
 
 //----------------add Event Listener ----------------//
 
