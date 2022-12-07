@@ -6,124 +6,141 @@ let cardCart = document.querySelector ('#cart__items');
 for ( k = 0 ; k < produitEnregistreLS.length ; k++){
     id = produitEnregistreLS[k]._id;
     canap = produitEnregistreLS[k];
-    console.log("canap");
-    console.log(canap);
-    fetch("http://localhost:3000/api/products/" + id )
+    afficheProduits(canap);
+   /* fetch("http://localhost:3000/api/products/" + id )
+    
+
    .then(function (res) {
     if (res.ok) {
     return res.json();  
+  
  
   }})
   .then((res) => {
     console.log(res);
     listProduct = res;
-
-    afficheProduits(listProduct, canap); 
-
-   
+    console.log("canap test 2e then")
+    console.log(canap)
+    //afficheProduits(listProduct, canap); 
+ 
     
   })
-  .catch((err)=> console.log(err));
+  .catch((err)=> console.log(err)); */
 
 }
 
 
-function afficheProduits (listProduct, canapS) {
-    console.log("canapS");
-    console.log(canapS); 
+function afficheProduits (canapS) {
+    fetch("http://localhost:3000/api/products/" + canapS._id )
 
+    .then(function (res) {
+     if (res.ok) {
+     return res.json();   
+   }})
+   .then((res) => {
+     console.log(res);
+     listProduct = res;
+     //afficheProduits(listProduct, canap); 
+     articleCard = document.createElement('article');
+     articleCard.classList.add ("cart__item");
+     articleCard.setAttribute('data-id', canapS._id)
+     articleCard.setAttribute ("data-color", canapS.color) //cet element n'apparaît pas dans le html
+     cart__items.appendChild (articleCard);
+
+     /*
+     console.log(articleCard.id)
+     //enregistrement de l'id produit LS dans une variable
+     givenId = (articleCard.id)
+     console.log("givenId")
+     console.log(givenId)
+    
+         
+     //put the name of the variable that stocks the id 
+//parcourir id de api (for of) 
+//if the id of api == givenId 
+//retrieve et affiche name and price of that instance in the api 
+  if ( listProduct[b]._id == givenId){
+     //Array.prototype.index( )
+     console.log(listProducts.indexOf(givenId))*/
+     
+  
+     let imageContainer = document.createElement ('div');
+     imageContainer.classList.add ("cart__item__img");
+     articleCard.appendChild (imageContainer);
+
+     
+        let imageCart = document.createElement ('img');
+         imageCart.src= listProduct.imageUrl;
+         imageCart.alt= listProduct.textAlt;
+         imageContainer.appendChild (imageCart); 
+
+         
+ let contentContainer = document.createElement ("div");
+ contentContainer.classList.add ("cart__item__content");
+ articleCard.appendChild(contentContainer);
+   let contentDescription = document.createElement ("div");
+     contentDescription.classList.add ("cart__item__content__description");
+     contentContainer.appendChild(contentDescription);
+     
+             let cartH2 = document.createElement ("h2");
+             cartH2.textContent =  listProduct .name;
+             contentDescription.appendChild(cartH2);
+
+             let cartColor = document.createElement ("p");
+             cartColor.textContent = canapS.color ;
+             contentDescription.appendChild(cartColor);
+
+             let cartPrice = document.createElement ("p");
+             cartPrice.textContent = listProduct.price;
+             contentDescription.appendChild(cartPrice); 
+
+         let contentSettings = document.createElement ("div");
+         contentSettings.classList.add ("cart__item__content__settings");
+         contentContainer.appendChild(contentSettings);
+            let cartQuantity = document.createElement ("div");
+             cartQuantity.classList.add ("cart__item__content__settings_quantity");
+             contentSettings.appendChild( cartQuantity);
+                 let cartAfficheQuantite = document.createElement ("p");
+                 cartAfficheQuantite.textContent = 'Qté : ' ;
+                 cartQuantity.appendChild(cartAfficheQuantite);
+                 
+                 let inputQuantite = document.createElement('input');
+                 inputQuantite.type = "number";
+                 inputQuantite.classList.add('itemQuantity');
+                 inputQuantite.name = 'itemQuantity';
+                 inputQuantite.value = canapS.quantity;
+                 inputQuantite.setAttribute("value", canapS.quantity);
+
+                 cartQuantity.appendChild(inputQuantite);
+
+     let cartDelete= document.createElement ("div");
+     cartDelete.classList.add ("cart__item__content__settings_delete");
+     contentSettings.appendChild( cartDelete);
+         
+         let deleteItem = document.createElement ("p");
+         deleteItem.classList.add ("deleteItem");
+         deleteItem.addEventListener("click", () => { 
+            console.log("click")
+         })
+         deleteItem.textContent = "Suprimer";
+         cartDelete.appendChild(deleteItem);
+ 
+
+ 
+
+
+   })
+   .catch((err)=> console.log(err));
    
 
         //declaration pour afficher et pour obtenir l'id pour chaque produit dans le local storage
-         articleCard = document.createElement('article');
-        articleCard.classList.add ("cart__item");
-        articleCard.setAttribute('data-id', canapS.id)
-        articleCard.setAttribute ("data-color", canapS.color) //cet element n'apparaît pas dans le html
-        cart__items.appendChild (articleCard);
-
-        /*
-        console.log(articleCard.id)
-        //enregistrement de l'id produit LS dans une variable
-        givenId = (articleCard.id)
-        console.log("givenId")
-        console.log(givenId)
-       
-            
-        //put the name of the variable that stocks the id 
-   //parcourir id de api (for of) 
-   //if the id of api == givenId 
-   //retrieve et affiche name and price of that instance in the api 
-     if ( listProduct[b]._id == givenId){
-        //Array.prototype.index( )
-        console.log(listProducts.indexOf(givenId))*/
-        
-     
-        let imageContainer = document.createElement ('div');
-        imageContainer.classList.add ("cart__item__img");
-        articleCard.appendChild (imageContainer);
-
-        
-           let imageCart = document.createElement ('img');
-            imageCart.src= listProduct.imageUrl;
-            imageCart.alt= listProduct.textAlt;
-            imageContainer.appendChild (imageCart); 
-
-            
-    let contentContainer = document.createElement ("div");
-    contentContainer.classList.add ("cart__item__content");
-    articleCard.appendChild(contentContainer);
-      let contentDescription = document.createElement ("div");
-        contentDescription.classList.add ("cart__item__content__description");
-        contentContainer.appendChild(contentDescription);
-        
-                let cartH2 = document.createElement ("h2");
-                cartH2.textContent =  listProduct .name;
-                contentDescription.appendChild(cartH2);
-
-                let cartColor = document.createElement ("p");
-                cartColor.textContent = canapS.color ;
-                contentDescription.appendChild(cartColor);
-
-                let cartPrice = document.createElement ("p");
-                cartPrice.textContent = listProduct.price;
-                contentDescription.appendChild(cartPrice); 
-
-            let contentSettings = document.createElement ("div");
-            contentSettings.classList.add ("cart__item__content__settings");
-            contentContainer.appendChild(contentSettings);
-               let cartQuantity = document.createElement ("div");
-                cartQuantity.classList.add ("cart__item__content__settings_quantity");
-                contentSettings.appendChild( cartQuantity);
-                    let cartAfficheQuantite = document.createElement ("p");
-                    cartAfficheQuantite.textContent = 'Qté : ' ;
-                    cartQuantity.appendChild(cartAfficheQuantite);
-                    
-                    let inputQuantite = document.createElement('input');
-                    inputQuantite.type = "number";
-                    inputQuantite.classList.add('itemQuantity');
-                    inputQuantite.name = 'itemQuantity';
-                    inputQuantite.value = canap.quantity;
-                    inputQuantite.setAttribute("value", canapS.quantity);
-
-                    cartQuantity.appendChild(inputQuantite);
-
-        let cartDelete= document.createElement ("div");
-        cartDelete.classList.add ("cart__item__content__settings_delete");
-        contentSettings.appendChild( cartDelete);
-            
-            let deleteItem = document.createElement ("p");
-            deleteItem.classList.add ("deleteItem");
-            deleteItem.textContent = "Suprimer";
-            cartDelete.appendChild(deleteItem);
-    
-
-    
-
+      
 }
 
 
+
 //--------------------------------calcul total du prix et de la quantité -------------------------------------------------------------//
-/*
+
 let totalPriceCalcul = [] ;
 //let productAPI = listProducts[b].price
 
@@ -179,9 +196,9 @@ totalQuantityText.textContent = getNumberProduct ();
 
 //PUT IN ORDER
 
-
-//array.prototype.sort()
 /*
+//array.prototype.sort()
+
 function putInOrder () {
     listProducts.sort(function (a,b)){
         //compare betwen one item and the one next to it in the API 
@@ -191,8 +208,8 @@ function putInOrder () {
     }
 
 }
-*/
 
+*/
 //--------------------------------modification du panier -------------------------------------------------------------//
 
 // SUPPRIMER PRODUIT 
@@ -200,20 +217,21 @@ function putInOrder () {
 
 
 //supprimer produit draft
-/*
-//selection du "bouton" supprimer 
-let btnSupprimer = document.querySelectorAll (".deleteItem");
 
+//selection du "bouton" supprimer 
+let btnSupprimer = document.querySelectorAll(".deleteItem");
+console.log("btnSupprimer")
+console.log(btnSupprimer)
 
 //parcurir les btn supprimer 
 for (let l= 0 ; l < btnSupprimer.length; l++){
     btnSupprimer[l].addEventListener ("click", (event) =>{
         event.preventDefault();
-
+console.log("click")
        
 //selection du produit id en particulier 
-        let idProduitASupprimer = produitEnregistreLS[l]._id;
-        let colorProduitASupprimer = produitEnregistreLS[l].color;
+        let idProduitASupprimer = listProduct[l]._id;
+        let colorProduitASupprimer =listProduct[l].color;
 
 
         // supprimer un objet qui est dans un tableau avec la méthode filter : 
@@ -234,7 +252,7 @@ for (let l= 0 ; l < btnSupprimer.length; l++){
     });
 
 }
-*/
+
 
 
 //CHANGEMENT DE QUANTITE - fisrt draft
@@ -284,7 +302,7 @@ function changeQuantity () {
 
 //selection du btnCommander pour pouvoir actionner l'envoi de données dans le local storage quand on clique dessus
 let btnCommander = document.querySelector (".cart__order__form__submit");
-//console.log ( btnCommander);
+console.log ( btnCommander);
 
 //----------------add Event Listener ----------------//
 

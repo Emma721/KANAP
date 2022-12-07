@@ -13,6 +13,7 @@ fetch("http://localhost:3000/api/products/" + id)
     listProduct = res ;
     console.log(res);
     afficheProduit(listProduct);
+    
 
   
   })
