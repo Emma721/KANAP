@@ -3,6 +3,7 @@ var produitEnregistreLS = JSON.parse(localStorage.getItem("product"));
 console.log(produitEnregistreLS);
 let cardCart = document.querySelector ('#cart__items');
 
+
 for ( k = 0 ; k < produitEnregistreLS.length ; k++){
     id = produitEnregistreLS[k]._id;
     canap = produitEnregistreLS[k];
@@ -41,7 +42,7 @@ function afficheProduits (canapS) {
      console.log(res);
      listProduct = res;
      //afficheProduits(listProduct, canap); 
-     articleCard = document.createElement('article');
+    articleCard = document.createElement('article');
      articleCard.classList.add ("cart__item");
      articleCard.setAttribute('data-id', canapS._id)
      articleCard.setAttribute ("data-color", canapS.color) //cet element n'apparaît pas dans le html
@@ -126,15 +127,16 @@ function afficheProduits (canapS) {
          cartDelete.appendChild(deleteItem);
  
 
- 
-
-
    })
    .catch((err)=> console.log(err));
    
+   
 
         //declaration pour afficher et pour obtenir l'id pour chaque produit dans le local storage
-      
+      window.onload = function() {
+  deleteItem(listProduct);
+}
+
 }
 
 
@@ -212,46 +214,42 @@ function putInOrder () {
 */
 //--------------------------------modification du panier -------------------------------------------------------------//
 
-// SUPPRIMER PRODUIT 
 
 
-
-//supprimer produit draft
-
-//selection du "bouton" supprimer 
-let btnSupprimer = document.querySelectorAll(".deleteItem");
-console.log("btnSupprimer")
-console.log(btnSupprimer)
-
-//parcurir les btn supprimer 
-for (let l= 0 ; l < btnSupprimer.length; l++){
-    btnSupprimer[l].addEventListener ("click", (event) =>{
+function deleteItem() {
+    let btnSupprimer = document.querySelectorAll(".deleteItem");
+    console.log("btnSupprimer", btnSupprimer);
+  
+    for (let l = 0; l < btnSupprimer.length; l++) {
+      btnSupprimer[l].addEventListener("click", (event) => {
         event.preventDefault();
-console.log("click")
-       
-//selection du produit id en particulier 
+  
+        // Get the ID and color of the product to be deleted
         let idProduitASupprimer = listProduct[l]._id;
-        let colorProduitASupprimer =listProduct[l].color;
+        let colorProduitASupprimer = listProduct[l].color;
+        console.log("idProduitASupprimer", idProduitASupprimer);
+        console.log("colorProduitASupprimer", colorProduitASupprimer);
+  
+        // Remove the product from the produitEnregistreLS array
+        produitEnregistreLS = produitEnregistreLS.filter(
+          (element) => element.id !== idProduitASupprimer
+        );
+        produitEnregistreLS = produitEnregistreLS.filter(
+          (element) => element.color !== colorProduitASupprimer
+        );
 
+        console.log("produitEnregistreLS: ", produitEnregistreLS); // should print the `produitEnregistreLS` array to the console
+  
+        // Update the local storage with the modified array
+        localStorage.setItem("product", JSON.stringify(produitEnregistreLS));
+  
+        // Reload the page to update the cart
+        window.location.href = "cart.html";
+      }, false);
+    }
+  }
+  
 
-        // supprimer un objet qui est dans un tableau avec la méthode filter : 
-            // filter va créer un nouveau tableau avec les produits differents a celui avec l'idProduitASupprimer 
-        
-        produitEnregistreLS = produitEnregistreLS.filter( element => element.id !== idProduitASupprimer);
-        produitEnregistreLS = produitEnregistreLS.filter( element => element.color !== colorProduitASupprimer);
-       
-
-        localStorage.setItem("product", JSON.stringify (produitEnregistreLS));
-        //on envoie la variable dns LS 
-        //if (produitEnregistreLS.id == idProduitASupprimer.id && produitEnregistreLS.color == colorProduitASupprimer){
-            
-        
-        //recharger la page une fois le produit supprimé
-        window.location.href = "cart.html" ; 
-
-    });
-
-}
 
 
 
