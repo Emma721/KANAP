@@ -2,31 +2,12 @@
 var produitEnregistreLS = JSON.parse(localStorage.getItem("product"));
 console.log(produitEnregistreLS);
 let cardCart = document.querySelector ('#cart__items');
-
+console.log(produitEnregistreLS)
 
 for ( k = 0 ; k < produitEnregistreLS.length ; k++){
     id = produitEnregistreLS[k]._id;
     canap = produitEnregistreLS[k];
     afficheProduits(canap);
-   /* fetch("http://localhost:3000/api/products/" + id )
-    
-
-   .then(function (res) {
-    if (res.ok) {
-    return res.json();  
-  
- 
-  }})
-  .then((res) => {
-    console.log(res);
-    listProduct = res;
-    console.log("canap test 2e then")
-    console.log(canap)
-    //afficheProduits(listProduct, canap); 
- 
-    
-  })
-  .catch((err)=> console.log(err)); */
 
 }
 
@@ -45,26 +26,9 @@ function afficheProduits (canapS) {
     articleCard = document.createElement('article');
      articleCard.classList.add ("cart__item");
      articleCard.setAttribute('data-id', canapS._id)
-     articleCard.setAttribute ("data-color", canapS.color) //cet element n'apparaît pas dans le html
-     cart__items.appendChild (articleCard);
+     articleCard.setAttribute ("data-color", canapS.color) 
+     cardCart.appendChild (articleCard);
 
-     /*
-     console.log(articleCard.id)
-     //enregistrement de l'id produit LS dans une variable
-     givenId = (articleCard.id)
-     console.log("givenId")
-     console.log(givenId)
-    
-         
-     //put the name of the variable that stocks the id 
-//parcourir id de api (for of) 
-//if the id of api == givenId 
-//retrieve et affiche name and price of that instance in the api 
-  if ( listProduct[b]._id == givenId){
-     //Array.prototype.index( )
-     console.log(listProducts.indexOf(givenId))*/
-     
-  
      let imageContainer = document.createElement ('div');
      imageContainer.classList.add ("cart__item__img");
      articleCard.appendChild (imageContainer);
@@ -120,26 +84,28 @@ function afficheProduits (canapS) {
          
          let deleteItem = document.createElement ("p");
          deleteItem.classList.add ("deleteItem");
-         deleteItem.addEventListener("click", () => { 
-            console.log("click")
-         })
          deleteItem.textContent = "Suprimer";
-         cartDelete.appendChild(deleteItem);
- 
+         deleteItem.addEventListener("click", function() { deleteProduct (canapS._id) });
+        cartDelete.appendChild(deleteItem);
 
-   })
-   .catch((err)=> console.log(err));
+         // Select all buttons with the btnSupprimer class
+
+
+
+    // Call the deleteProduct function, passing in the articleCard element
+    deleteProduct(articleCard);
+  }).catch((err)=> console.log(err));
    
    
 
-        //declaration pour afficher et pour obtenir l'id pour chaque produit dans le local storage
+        //appel a deleteProduct que lorsque les élèments du DOM sont bien affichés. 
       window.onload = function() {
-  deleteItem(listProduct);
+     
+  deleteProduct(articleCard);
 }
 
+
 }
-
-
 
 //--------------------------------calcul total du prix et de la quantité -------------------------------------------------------------//
 
@@ -215,43 +181,43 @@ function putInOrder () {
 //--------------------------------modification du panier -------------------------------------------------------------//
 
 
+// SUPPRIMER PRODUIT 
 
-function deleteItem() {
-    let btnSupprimer = document.querySelectorAll(".deleteItem");
-    console.log("btnSupprimer", btnSupprimer);
-  
-    for (let l = 0; l < btnSupprimer.length; l++) {
-      btnSupprimer[l].addEventListener("click", (event) => {
-        event.preventDefault();
-  
-        // Get the ID and color of the product to be deleted
-        let idProduitASupprimer = listProduct[l]._id;
-        let colorProduitASupprimer = listProduct[l].color;
-        console.log("idProduitASupprimer", idProduitASupprimer);
-        console.log("colorProduitASupprimer", colorProduitASupprimer);
-  
-        // Remove the product from the produitEnregistreLS array
-        produitEnregistreLS = produitEnregistreLS.filter(
-          (element) => element.id !== idProduitASupprimer
-        );
-        produitEnregistreLS = produitEnregistreLS.filter(
-          (element) => element.color !== colorProduitASupprimer
-        );
+function deleteProduct(articleCard) {
+    const btnSupprimer = document.querySelector('.deleteItem');
 
-        console.log("produitEnregistreLS: ", produitEnregistreLS); // should print the `produitEnregistreLS` array to the console
-  
-        // Update the local storage with the modified array
-        localStorage.setItem("product", JSON.stringify(produitEnregistreLS));
-  
-        // Reload the page to update the cart
-        window.location.href = "cart.html";
-      }, false);
-    }
-  }
-  
+btnSupprimer.addEventListener('click', function(event) {
+    const btnSupprimer = document.querySelector('.deleteItemr');
+  // Get the articleCard element
+  const articleCard = event.target.closest('article');
+ 
 
+    // Get the product ID and color from the articleCard element
+    const productId = articleCard.getAttribute('data-id');
+    const productColor = articleCard.getAttribute('data-color');
+  
+    // Get the products array from local storage
+    const products = JSON.parse(localStorage.getItem("product"));
+  
+    // Find the index of the product in the array
+    const index = products.findIndex(product => product._id === productId && product.color === productColor);
+  
+    // Remove the product from the array
+    products.splice(index, 1);
+  
+    // Update the products in local storage
+    localStorage.setItem("product", JSON.stringify(products));
+  
+    // Remove the articleCard element from the DOM
+    articleCard.remove();
 
+    //recharger la page une fois le produit supprimé
+    //window.location.href = "cart.html" ; 
 
+    
+})
+}
+  
 
 //CHANGEMENT DE QUANTITE - fisrt draft
 
