@@ -77,6 +77,11 @@ function afficheProduits (canapS) {
                  inputQuantite.setAttribute("value", canapS.quantity);
 
                  cartQuantity.appendChild(inputQuantite);
+                 changeQuantity (inputQuantite)
+
+
+
+
 
      let cartDelete= document.createElement ("div");
      cartDelete.classList.add ("cart__item__content__settings_delete");
@@ -94,6 +99,8 @@ function afficheProduits (canapS) {
 
     // Call the deleteProduct function, passing in the articleCard element
     deleteProduct(articleCard);
+ 
+
   }).catch((err)=> console.log(err));
    
    
@@ -102,6 +109,10 @@ function afficheProduits (canapS) {
       window.onload = function() {
      
   deleteProduct(articleCard);
+
+
+
+
 }
 
 
@@ -217,49 +228,53 @@ btnSupprimer.addEventListener('click', function(event) {
     
 })
 }
-  
+ 
 
 //CHANGEMENT DE QUANTITE - fisrt draft
 
-/*
-function changeQuantity () {
 
-    //get all the inputs available and add event to for each
-        //let oldQuantity = inputQuantite.value
-        let oldQuantity = document.getElementsByClassName(".itemQuantity").value;
-        let newInput = 0
-        for ( i = 0 ; i < newInput.length ; i ++) {
-         //add event listener du changement de l'input 
-            newInput.addEventListener ('change', (event) => {
-            preventDefault(event);
-            newInput = 1
-            
-            if (newInput != oldQuantity){
-                //ecrase produitEnregistreLS[b].quantity with value of newInput
-                inputQuantite[b].value = newInput
-                //afficher le panier updated
-                afficheProduits();
+function changeQuantity() {
+    // Get all the quantity input elements
+    const quantityInputs = document.querySelectorAll('.itemQuantity');
+  
+    // Add a change event listener to each input element
+    quantityInputs.forEach(input => {
+      input.addEventListener('change', function() {
+        // Get the current value of the input element
+        const currentValue = this.value;
+  
+        // Get the product id and color from the input's parent element
+        const productId = this.closest('article').dataset.id;
+        const color = this.closest('article').dataset.color;
+  
+        // Get the product from local storage
+        const products = JSON.parse(localStorage.getItem('product'));
+        let product;
+        for (let i = 0; i < products.length; i++) {
+          if (products[i]._id === productId && products[i].color === color) {
+            product = products[i];
+            break;
+          }
+        }
+  
+        // Update the quantity in the product object
+        product.quantity = currentValue;
+  
+        // Update the local storage element
+        localStorage.setItem('product', JSON.stringify(products));
 
-                //calculate updated price 
-                getTotalPrice ();
-                //send to local storage
-                localStorage.setItem("product", JSON.stringify(produitEnregistreLS));
-                
-            }else {
-                //push to local storage
-                localStorage.setItem("product", JSON.stringify(produitEnregistreLS));
-            }
-
-       
-        });
-    }
-}
+             // Refresh the page
+      location.reload();
+      });
+    });
+  }
+  
+  // Call the changeQuantity function when the DOM is ready
+  document.addEventListener('DOMContentLoaded', changeQuantity);
 
 
-*/
-
-
-
+  
+   
 //--------------------------------formulaire-------------------------------------------------------------//
 
 
