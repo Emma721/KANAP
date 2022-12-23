@@ -6,10 +6,13 @@ console.log(produitEnregistreLS)
 
 for ( k = 0 ; k < produitEnregistreLS.length ; k++){
     id = produitEnregistreLS[k]._id;
-    canap = produitEnregistreLS[k];
+    canap = produitEnregistreLS[k];  
     afficheProduits(canap);
+   
 
 }
+
+
 
 
 function afficheProduits (canapS) {
@@ -28,6 +31,7 @@ function afficheProduits (canapS) {
      articleCard.setAttribute('data-id', canapS._id)
      articleCard.setAttribute ("data-color", canapS.color) 
      cardCart.appendChild (articleCard);
+     
 
      let imageContainer = document.createElement ('div');
      imageContainer.classList.add ("cart__item__img");
@@ -62,9 +66,12 @@ function afficheProduits (canapS) {
          let contentSettings = document.createElement ("div");
          contentSettings.classList.add ("cart__item__content__settings");
          contentContainer.appendChild(contentSettings);
+
+
             let cartQuantity = document.createElement ("div");
              cartQuantity.classList.add ("cart__item__content__settings_quantity");
              contentSettings.appendChild( cartQuantity);
+
                  let cartAfficheQuantite = document.createElement ("p");
                  cartAfficheQuantite.textContent = 'Qté : ' ;
                  cartQuantity.appendChild(cartAfficheQuantite);
@@ -78,10 +85,8 @@ function afficheProduits (canapS) {
 
                  cartQuantity.appendChild(inputQuantite);
                  changeQuantity (inputQuantite)
-
-
-
-
+                 
+                 
 
      let cartDelete= document.createElement ("div");
      cartDelete.classList.add ("cart__item__content__settings_delete");
@@ -96,10 +101,11 @@ function afficheProduits (canapS) {
          // Select all buttons with the btnSupprimer class
 
 
-
+    
     // Call the deleteProduct function, passing in the articleCard element
     deleteProduct(articleCard);
- 
+
+    getTotalPrice ();
 
   }).catch((err)=> console.log(err));
    
@@ -110,34 +116,11 @@ function afficheProduits (canapS) {
      
   deleteProduct(articleCard);
 
-
-
-
 }
 
 
-}
 
 //--------------------------------calcul total du prix et de la quantité -------------------------------------------------------------//
-
-let totalPriceCalcul = [] ;
-//let productAPI = listProducts[b].price
-
-//Aller chercher tous les prix qu'il y a dans le panier
-for ( let c = 0; c < produitEnregistreLS.length; c++){ 
-    //a changer par le nom donné au prix du produit x, recupéré auprès de l'api.
-    let totalPriceInsideCart =  produitEnregistreLS[c].price;
-   // console.log(totalPriceInsideCart);
-
-    //mettre les prix du panier dans le tableau totalPriceCalcul methode .reduce
-    totalPriceCalcul.push(totalPriceInsideCart);
-    //console.log(totalPriceCalcul);        
-    
-} 
-
-//calcul quantité
-
-
 
 function getNumberProduct () {
     //let basket = get basket(); 
@@ -149,23 +132,41 @@ function getNumberProduct () {
 
 }
 
-//insertion du résultat dans l'affichage
-let totalPriceText = document.querySelector ('#totalPrice');
-totalPriceText.textContent = getTotalPrice ();
-
-
-function getTotalPrice (){
-    //let basket = get basket(); 
-    let total = 0 ;
-    for (let product of produitEnregistreLS){
-        total += Number (product.quantity) * Number (product.price);
-    }
-    return total;
-}
 
 //insertion du résultat dans l'affichage
 let totalQuantityText = document.querySelector ('#totalQuantity');
 totalQuantityText.textContent = getNumberProduct ();
+/*
+function getTotalPrice (){
+    let cartPrices = document.querySelectorAll('.cartPrice');
+    //let basket = get basket(); 
+    let total = 0 ;
+
+    for (let product of produitEnregistreLS){
+        total += Number (product.quantity) * Number (product.cartPrice);
+    }
+    return total;
+}*/
+
+//old totalprice
+window.onload = function () {
+  function getTotalPrice() {
+    // Get all elements with the class "cartPrice"
+    let cartPrices = document.querySelectorAll('.cartPrice');
+    console.log("cartPrices",cartPrices)
+    let total = 0;
+    // Iterate through the elements and add the price to the total
+    for (let price of cartPrices) {
+      total += Number(price.textContent) * Number(price.parentNode.querySelector('.itemQuantity').value);
+    }
+    return total;
+  }
+  
+  //insertion du résultat dans l'affichage
+  let totalPriceText = document.querySelector ('#totalPrice');
+  totalPriceText.textContent = getTotalPrice ();
+
+}
 
 
 //--------------------------------affichage du panier -------------------------------------------------------------//
@@ -189,6 +190,8 @@ function putInOrder () {
 }
 
 */
+
+
 //--------------------------------modification du panier -------------------------------------------------------------//
 
 
@@ -230,7 +233,7 @@ btnSupprimer.addEventListener('click', function(event) {
 }
  
 
-//CHANGEMENT DE QUANTITE - fisrt draft
+//CHANGEMENT DE QUANTITE - 
 
 
 function changeQuantity() {
@@ -478,4 +481,5 @@ const order = {
 
  
  }); 
-}); 
+});
+} 
